@@ -1,14 +1,10 @@
 import { QuadTree } from './QuadTree';
 import type { SimEdge, SimNode } from './types';
 
-const DAMPING = 0.85;
-const SPRING_STIFFNESS = 0.05;
-const CENTER_STRENGTH = 0.005;
-const REPULSION = 800;
 const THETA = 0.9;
 const MAX_VELOCITY = 8;
 const SETTLED_THRESHOLD = 0.1;
-const SETTLE_FRAMES = 90; // frames of low velocity before pausing
+const SETTLE_FRAMES = 90;
 
 export class ForceSimulation {
   nodes: SimNode[];
@@ -21,27 +17,97 @@ export class ForceSimulation {
   private idealSpring: number;
   private settledCount: number = 0;
 
+  // Node-count-adaptive constants
+  private damping: number;
+  private springStiffness: number;
+  private centerStrength: number;
+  private repulsion: number;
+
   constructor(nodes: SimNode[], edges: SimEdge[], width: number, height: number) {
     this.nodes = nodes;
     this.edges = edges;
     this.width = width;
     this.height = height;
-    this.idealSpring = 60 + Math.log(Math.max(1, nodes.length)) * 20;
+
+    const n = Math.max(1, nodes.length);
+    this.repulsion = 1800 / Math.sqrt(n / 30);
+    this.springStiffness = 0.04;
+    this.centerStrength = 0.006 + 0.002 * Math.log(n);
+    this.damping = 0.86;
+    this.idealSpring = 80 + Math.log2(n + 1) * 22;
   }
 
-  /** Scatter nodes in a circle so we don't start at origin cluster */
+  /** BFS-seeded radial layout — hop 0 at center, each hop ring at 130px per hop. */
   scatter(): void {
-    const r = Math.min(this.width, this.height) * 0.35;
-    this.nodes.forEach((n, i) => {
-      if (n.x === 0 && n.y === 0) {
-        const angle = (i / this.nodes.length) * Math.PI * 2;
-        const jitter = (Math.random() - 0.5) * 40;
-        n.x = this.width / 2 + Math.cos(angle) * (r + jitter);
-        n.y = this.height / 2 + Math.sin(angle) * (r + jitter);
-        n.vx = 0;
-        n.vy = 0;
+    const adjacency = new Map<string, string[]>();
+    for (const e of this.edges) {
+      if (!adjacency.has(e.source)) adjacency.set(e.source, []);
+      if (!adjacency.has(e.target)) adjacency.set(e.target, []);
+      adjacency.get(e.source)!.push(e.target);
+      adjacency.get(e.target)!.push(e.source);
+    }
+
+    // BFS from first node to compute hop distances
+    const dist = new Map<string, number>();
+    const first = this.nodes[0]?.id;
+    if (first) {
+      const queue = [first];
+      dist.set(first, 0);
+      while (queue.length) {
+        const cur = queue.shift()!;
+        for (const nb of adjacency.get(cur) ?? []) {
+          if (!dist.has(nb)) { dist.set(nb, dist.get(cur)! + 1); queue.push(nb); }
+        }
       }
+    }
+
+    const byHop = new Map<number, SimNode[]>();
+    for (const n of this.nodes) {
+      const d = dist.get(n.id) ?? 99;
+      if (!byHop.has(d)) byHop.set(d, []);
+      byHop.get(d)!.push(n);
+    }
+
+    const cx = this.width / 2;
+    const cy = this.height / 2;
+    const hopRadius = 130;
+
+    byHop.forEach((nodesAtHop, hop) => {
+      if (hop === 0) {
+        nodesAtHop.forEach((n) => { n.x = cx; n.y = cy; n.vx = 0; n.vy = 0; });
+        return;
+      }
+      const r = hop * hopRadius;
+      nodesAtHop.forEach((n, i) => {
+        const angle = (i / nodesAtHop.length) * Math.PI * 2 + hop * 0.5;
+        n.x = cx + Math.cos(angle) * r + (Math.random() - 0.5) * 20;
+        n.y = cy + Math.sin(angle) * r + (Math.random() - 0.5) * 20;
+        n.vx = 0; n.vy = 0;
+      });
     });
+  }
+
+  /** After warmup, fit viewport to bounding box. Returns { zoom, panX, panY }. */
+  fitView(canvasW: number, canvasH: number): { zoom: number; panX: number; panY: number } {
+    if (this.nodes.length === 0) return { zoom: 1, panX: 0, panY: 0 };
+    let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+    for (const n of this.nodes) {
+      minX = Math.min(minX, n.x - n.radius);
+      maxX = Math.max(maxX, n.x + n.radius);
+      minY = Math.min(minY, n.y - n.radius);
+      maxY = Math.max(maxY, n.y + n.radius);
+    }
+    const pad = 0.12;
+    const gw = maxX - minX || 1;
+    const gh = maxY - minY || 1;
+    const zoom = Math.min(
+      canvasW / (gw * (1 + pad * 2)),
+      canvasH / (gh * (1 + pad * 2)),
+      1.5,
+    );
+    const panX = canvasW / 2 - ((minX + maxX) / 2) * zoom;
+    const panY = canvasH / 2 - ((minY + maxY) / 2) * zoom;
+    return { zoom, panX, panY };
   }
 
   tick(): void {
@@ -72,29 +138,28 @@ export class ForceSimulation {
 
       // Repulsion
       if (qt) {
-        const [rfx, rfy] = qt.forceOn({ x: nd.x, y: nd.y, mass: nd.mass }, REPULSION);
+        const [rfx, rfy] = qt.forceOn({ x: nd.x, y: nd.y, mass: nd.mass }, this.repulsion);
         fx += rfx;
         fy += rfy;
       } else {
-        // Naive O(n²) for small graphs
         for (const other of this.nodes) {
           if (other.id === nd.id) continue;
           const dx = nd.x - other.x;
           const dy = nd.y - other.y;
           const distSq = dx * dx + dy * dy + 0.01;
           const dist = Math.sqrt(distSq);
-          const f = (REPULSION * other.mass) / distSq;
+          const f = (this.repulsion * other.mass) / distSq;
           fx += (dx / dist) * f;
           fy += (dy / dist) * f;
         }
       }
 
       // Centering
-      fx += (cx - nd.x) * CENTER_STRENGTH;
-      fy += (cy - nd.y) * CENTER_STRENGTH;
+      fx += (cx - nd.x) * this.centerStrength;
+      fy += (cy - nd.y) * this.centerStrength;
 
-      nd.vx = (nd.vx + fx) * DAMPING;
-      nd.vy = (nd.vy + fy) * DAMPING;
+      nd.vx = (nd.vx + fx) * this.damping;
+      nd.vy = (nd.vy + fy) * this.damping;
     }
 
     // Spring attraction along edges
@@ -108,7 +173,7 @@ export class ForceSimulation {
       const dist = Math.sqrt(dx * dx + dy * dy) + 0.01;
       const ideal = this.idealSpring * (edge.weight || 1);
       const displacement = dist - ideal;
-      const f = displacement * SPRING_STIFFNESS;
+      const f = displacement * this.springStiffness;
       const nx = dx / dist;
       const ny = dy / dist;
 
@@ -131,11 +196,8 @@ export class ForceSimulation {
       nd.x += nd.vx * this.alpha;
       nd.y += nd.vy * this.alpha;
 
-      // Soft bounds
-      const pad = nd.radius + 8;
-      nd.x = Math.max(pad, Math.min(this.width - pad, nd.x));
-      nd.y = Math.max(pad, Math.min(this.height - pad, nd.y));
-
+      // Bounds clamping removed to allow infinite pan/zoom canvas space without glitching
+      
       maxV = Math.max(maxV, speed);
     }
 
@@ -178,12 +240,13 @@ export class ForceSimulation {
     }
   }
 
-  /** Run N ticks synchronously for initial warmup */
-  warmup(ticks = 60): void {
+  /** Run N ticks synchronously for initial warmup (count adapts to graph size). */
+  warmup(ticks?: number): void {
+    const adaptiveTicks = ticks ?? Math.min(300, 60 + this.nodes.length * 1.5);
     this.scatter();
     const origAlpha = this.alpha;
     this.alpha = 1;
-    for (let i = 0; i < ticks; i++) {
+    for (let i = 0; i < adaptiveTicks; i++) {
       this.tick();
     }
     this.alpha = origAlpha;

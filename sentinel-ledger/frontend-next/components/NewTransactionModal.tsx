@@ -14,6 +14,57 @@ const CHAINS = ['ethereum', 'polygon', 'arbitrum', 'optimism', 'base', 'bnb'];
 const TOKENS = ['ETH', 'USDC', 'USDT', 'WBTC', 'DAI', 'MATIC', 'BNB'];
 const JURISDICTIONS = ['EU', 'US', 'UK', 'CH', 'SG', 'AE', 'OTHER'];
 
+const DEMO_SCENARIOS = [
+  {
+    name: 'Clean Transfer',
+    color: '#22c55e',
+    description: 'Vitalik → Binance · low risk · AUTO_APPROVE',
+    data: {
+      wallet_from: '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045',
+      wallet_to:   '0x28C6c06298d514Db089934071355E5743bf21d60',
+      amount_eur:  '4500',
+      token:       'ETH',
+      chain:       'ethereum',
+      jurisdiction:'EU',
+      velocity_24h:'2',
+      tx_count_7d: '5',
+      memo:        '',
+    },
+  },
+  {
+    name: 'Structuring Alert',
+    color: '#f59e0b',
+    description: 'Sub-threshold repeated amounts · high velocity · ESCALATE',
+    data: {
+      wallet_from: '0x1111111111111111111111111111111111111111',
+      wallet_to:   '0x2222222222222222222222222222222222222222',
+      amount_eur:  '9800',
+      token:       'USDC',
+      chain:       'ethereum',
+      jurisdiction:'EU',
+      velocity_24h:'18',
+      tx_count_7d: '47',
+      memo:        'transfer',
+    },
+  },
+  {
+    name: 'Mixer Exposure',
+    color: '#ef4444',
+    description: 'Tornado Cash 10 ETH pool origin · ESCALATE / BLOCK',
+    data: {
+      wallet_from: '0x47CE0C6eD5B0Ce3d3A51fdb1C52dc66a7c3c2936',
+      wallet_to:   '0x3333333333333333333333333333333333333333',
+      amount_eur:  '28000',
+      token:       'ETH',
+      chain:       'ethereum',
+      jurisdiction:'AE',
+      velocity_24h:'8',
+      tx_count_7d: '23',
+      memo:        '',
+    },
+  },
+] as const;
+
 function genTxId() {
   return '0x' + Array.from({ length: 32 }, () => Math.floor(Math.random() * 256).toString(16).padStart(2, '0')).join('');
 }
@@ -135,8 +186,26 @@ export function NewTransactionModal({ onClose }: Props) {
         try {
           const trace = await api.walletTrace(payload.wallet_from, 3, 6, 60);
           const { nodes, edges } = traceToSubgraph(trace, payload.wallet_from);
+          
+          if (!nodes.find(n => n.address.toLowerCase() === payload.wallet_to.toLowerCase())) {
+            nodes.push({
+               id: payload.wallet_to, address: payload.wallet_to, short_address: payload.wallet_to.slice(0,6) + '…' + payload.wallet_to.slice(-4),
+               type: 'wallet', risk: 'low', taint: 0, tx_count: 1, age_days: 0, x:0, y:0, vx:0, vy:0
+            });
+            edges.push({
+               id: payload.tx_id, from: payload.wallet_from, to: payload.wallet_to, amount_eur: payload.amount_eur, timestamp: payload.timestamp, tx_hash: payload.tx_id
+            });
+          }
           setGraph(nodes, edges);
-        } catch { /* graph unavailable */ }
+        } catch {
+          // Fallback if Etherscan tracing fails or hits rate limit
+          setGraph([
+             { id: payload.wallet_from, address: payload.wallet_from, short_address: payload.wallet_from.slice(0,6) + '…' + payload.wallet_from.slice(-4), type: 'origin', risk: 'low', taint: 0, tx_count: 1, age_days: 0, x:0, y:0, vx:0, vy:0 },
+             { id: payload.wallet_to, address: payload.wallet_to, short_address: payload.wallet_to.slice(0,6) + '…' + payload.wallet_to.slice(-4), type: 'wallet', risk: 'low', taint: 0, tx_count: 1, age_days: 0, x:0, y:0, vx:0, vy:0 }
+          ], [
+             { id: payload.tx_id, from: payload.wallet_from, to: payload.wallet_to, amount_eur: payload.amount_eur, timestamp: payload.timestamp, tx_hash: payload.tx_id }
+          ]);
+        }
       }
 
       onClose();
@@ -167,6 +236,41 @@ export function NewTransactionModal({ onClose }: Props) {
           <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--color-text-tertiary)', padding: 4 }}>
             <X size={16} />
           </button>
+        </div>
+
+        {/* Demo scenarios */}
+        <div style={{
+          padding: '10px 18px',
+          borderBottom: '0.5px solid var(--color-border-tertiary)',
+          display: 'flex', flexDirection: 'column', gap: 6,
+        }}>
+          <div style={{ fontSize: 10, color: 'var(--color-text-tertiary)', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+            Quick-fill demo scenario
+          </div>
+          <div style={{ display: 'flex', gap: 6 }}>
+            {DEMO_SCENARIOS.map((scenario) => (
+              <button
+                key={scenario.name}
+                type="button"
+                onClick={() => setForm((f) => ({ ...f, ...scenario.data, tx_id: genTxId(), timestamp: Math.floor(Date.now() / 1000).toString() }))}
+                style={{
+                  flex: 1,
+                  background: 'var(--color-background-secondary)',
+                  border: `0.5px solid ${scenario.color}55`,
+                  borderRadius: 'var(--border-radius-md)',
+                  padding: '6px 8px',
+                  cursor: 'pointer',
+                  textAlign: 'left',
+                  transition: 'background 0.15s',
+                }}
+                onMouseOver={(e) => (e.currentTarget.style.background = `${scenario.color}18`)}
+                onMouseOut={(e) => (e.currentTarget.style.background = 'var(--color-background-secondary)')}
+              >
+                <div style={{ fontSize: 11, fontWeight: 600, color: scenario.color, marginBottom: 2 }}>{scenario.name}</div>
+                <div style={{ fontSize: 9, color: 'var(--color-text-tertiary)', lineHeight: 1.4 }}>{scenario.description}</div>
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* Form */}

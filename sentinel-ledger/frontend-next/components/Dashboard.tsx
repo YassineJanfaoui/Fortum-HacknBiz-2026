@@ -10,9 +10,15 @@ import { AuditTimeline } from './audit/AuditTimeline';
 import { HITLBar } from './hitl/HITLBar';
 import { NewTransactionModal } from './NewTransactionModal';
 import { useDashboardStore } from '@/lib/store';
+import { DemoPanel } from './demo/DemoPanel';
+import { FreezeModal } from './demo/FreezeModal';
+import { CustomerNotificationToast } from './demo/CustomerNotificationToast';
+import { SARDraftPanel } from './demo/SARDraftPanel';
+import { ScenarioCompleteModal } from './demo/ScenarioCompleteModal';
+import { ReplayScrubber } from './demo/ReplayScrubber';
 
 export function Dashboard() {
-  const { setSelectedNodeId, hitlVisible } = useDashboardStore();
+  const { setSelectedNodeId, hitlVisible, demoMode } = useDashboardStore();
   const [showModal, setShowModal] = useState(false);
 
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
@@ -36,20 +42,23 @@ export function Dashboard() {
       <div style={{
         display: 'grid',
         gridTemplateRows: '44px 1fr',
-        gridTemplateColumns: '260px 1fr 280px',
+        gridTemplateColumns: '260px minmax(0, 1fr) 280px',
         gridTemplateAreas: '"topbar topbar topbar" "feed graph right"',
         height: '100vh',
-        width: '100vw',
+        width: '100%',
         overflow: 'hidden',
         background: 'var(--color-background-tertiary)',
       }}>
         <TopBar onNewTx={() => setShowModal(true)} />
 
-        <TransactionFeed />
+        <div style={{ gridArea: 'feed', overflow: 'hidden', minWidth: 0 }}>
+          {demoMode ? <DemoPanel /> : <TransactionFeed />}
+        </div>
 
         <main style={{
           gridArea: 'graph',
           overflow: 'hidden',
+          minWidth: 0,
           display: 'flex',
           flexDirection: 'column',
           background: 'var(--color-background-primary)',
@@ -64,6 +73,7 @@ export function Dashboard() {
           display: 'grid',
           gridTemplateRows: hitlVisible ? '1fr 170px 190px 52px' : '1fr 170px 190px',
           overflow: 'hidden',
+          minWidth: 0,
           background: 'var(--color-background-primary)',
         }}>
           <AgentFeed />
@@ -74,6 +84,12 @@ export function Dashboard() {
       </div>
 
       {showModal && <NewTransactionModal onClose={() => setShowModal(false)} />}
+      
+      <FreezeModal />
+      <CustomerNotificationToast />
+      <SARDraftPanel />
+      <ScenarioCompleteModal />
+      <ReplayScrubber />
     </>
   );
 }

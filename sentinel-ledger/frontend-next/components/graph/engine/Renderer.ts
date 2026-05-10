@@ -14,7 +14,7 @@ const C = {
   ringLow:        '#22c55e',
   ringCritical:   '#dc2626',
   taintFill:      'rgba(239,68,68,0.45)',
-  edgeLine:       'rgba(148,163,184,0.25)',
+  edgeLine:       'rgba(139, 148, 173, 0.55)',
   edgeSelected:   'rgba(59,130,246,0.85)',
   edgeArrow:      'rgba(148,163,184,0.35)',
   edgeArrowSel:   'rgba(59,130,246,0.85)',
@@ -84,14 +84,16 @@ export function renderFrame(
 ) {
   const { nodes, edges, selectedId, hoveredId, viewport, zoom } = s;
 
-  ctx.save();
-  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  // Clear in the DPR-scaled space set by the render loop (cw*dpr = canvas.width = full canvas)
   ctx.clearRect(0, 0, cw, ch);
-  ctx.restore();
+  // Multiply viewport on top of the existing DPR transform to preserve HiDPI scaling
+  ctx.transform(viewport.scale, 0, 0, viewport.scale, viewport.x, viewport.y);
 
-  viewport.applyToContext(ctx);
-
-  const byId = new Map<string, GraphNode>(nodes.map((n) => [n.id, n]));
+  const byId = new Map<string, GraphNode>();
+  for (const n of nodes) {
+    if (n.id) byId.set(n.id, n);
+    if (n.address) byId.set(n.address, n);
+  }
 
   // BFS path from selected node
   const pathNodes = new Set<string>();
@@ -111,9 +113,17 @@ export function renderFrame(
   const hasSel = selectedId !== null;
 
   // ── Edges ──────────────────────────────────────────────────────
+  const fmtEur = new Intl.NumberFormat('en-EU', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 });
+  const missingNodes: string[] = [];
+  
   for (const edge of edges) {
-    const src = byId.get(edge.from); const tgt = byId.get(edge.to);
-    if (!src || !tgt) continue;
+    const fromId = edge.from || (edge as any).source;
+    const toId = edge.to || (edge as any).target;
+    const src = byId.get(fromId); const tgt = byId.get(toId);
+    if (!src || !tgt) {
+      missingNodes.push(`${fromId} -> ${toId}`);
+      continue;
+    }
 
     const isPath = pathEdges.has(edge.id);
     const dimmed = hasSel && !isPath;
@@ -138,6 +148,29 @@ export function renderFrame(
     const ang = Math.atan2(y2 - y1, x2 - x1);
     const arSz = Math.min(5, Math.max(2.5, tr * 0.3));
     arrow(ctx, x2, y2, ang, arSz, isPath ? C.edgeArrowSel : C.edgeArrow);
+
+    // Edge Labels
+    if (!dimmed && zoom > 0.8) {
+      ctx.save();
+      const mx = (x1 + x2) / 2;
+      const my = (y1 + y2) / 2;
+      ctx.translate(mx, my);
+      // Flip text if upside down
+      if (ang > Math.PI / 2 || ang < -Math.PI / 2) {
+        ctx.rotate(ang + Math.PI);
+      } else {
+        ctx.rotate(ang);
+      }
+      ctx.font = `${Math.max(6, 7 * Math.min(1, zoom))}px ui-monospace,monospace`;
+      ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
+      ctx.fillStyle = isPath ? C.labelSel : C.labelColor;
+      ctx.fillText(fmtEur.format(edge.amount_eur), 0, -3);
+      ctx.restore();
+    }
+  }
+
+  if (missingNodes.length > 0 && process.env.NODE_ENV === 'development') {
+    console.warn('Missing nodes for edges:', missingNodes);
   }
 
   ctx.globalAlpha = 1;

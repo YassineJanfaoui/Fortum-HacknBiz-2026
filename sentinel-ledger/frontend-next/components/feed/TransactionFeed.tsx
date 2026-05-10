@@ -96,8 +96,27 @@ export function TransactionFeed() {
         try {
           const trace = await api.walletTrace(walletFrom, 3, 6, 60);
           const { nodes, edges } = traceToSubgraph(trace, walletFrom);
+          
+          const walletTo = String(txSummary.wallet_to ?? tx.wallet_to);
+          if (walletTo.startsWith('0x') && !nodes.find(n => n.address.toLowerCase() === walletTo.toLowerCase())) {
+            nodes.push({
+               id: walletTo, address: walletTo, short_address: walletTo.slice(0,6) + '…' + walletTo.slice(-4),
+               type: 'wallet', risk: 'low', taint: 0, tx_count: 1, age_days: 0, x:0, y:0, vx:0, vy:0
+            });
+            edges.push({
+               id: txId, from: walletFrom, to: walletTo, amount_eur: tx.amount_eur, timestamp: tx.timestamp, tx_hash: txId
+            });
+          }
           setGraph(nodes, edges);
-        } catch { /* graph unavailable */ }
+        } catch {
+          const walletTo = String(txSummary.wallet_to ?? tx.wallet_to);
+          setGraph([
+             { id: walletFrom, address: walletFrom, short_address: walletFrom.slice(0,6) + '…' + walletFrom.slice(-4), type: 'origin', risk: 'low', taint: 0, tx_count: 1, age_days: 0, x:0, y:0, vx:0, vy:0 },
+             { id: walletTo, address: walletTo, short_address: walletTo.slice(0,6) + '…' + walletTo.slice(-4), type: 'wallet', risk: 'low', taint: 0, tx_count: 1, age_days: 0, x:0, y:0, vx:0, vy:0 }
+          ], [
+             { id: txId, from: walletFrom, to: walletTo, amount_eur: tx.amount_eur, timestamp: tx.timestamp, tx_hash: txId }
+          ]);
+        }
       }
     } catch { /* use feed data only */ }
   };

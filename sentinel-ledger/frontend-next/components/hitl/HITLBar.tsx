@@ -6,7 +6,7 @@ import { api } from '@/lib/api';
 import { useDashboardStore } from '@/lib/store';
 
 export function HITLBar() {
-  const { activeInvestigation, hitlVisible, setHitlVisible, setActiveInvestigation, setSystemStatus } = useDashboardStore();
+  const { activeInvestigation, hitlVisible, setHitlVisible, setActiveInvestigation, setSystemStatus, setReplayVisible, setReplayTimeMs, activeScenario } = useDashboardStore();
   const [acting, setActing] = useState(false);
 
   const handleAction = useCallback(async (action: 'approve' | 'reject') => {
@@ -64,7 +64,13 @@ export function HITLBar() {
         Reject
       </button>
 
-      <button className="btn btn-neutral" aria-label="Replay">
+      <button className="btn btn-neutral" aria-label="Replay" onClick={() => {
+        if (activeScenario) {
+          setReplayVisible(true);
+          const maxTime = activeScenario.timeline[activeScenario.timeline.length - 1].delayMs;
+          setReplayTimeMs(maxTime);
+        }
+      }}>
         <PlayCircle size={11} />
         Replay
       </button>

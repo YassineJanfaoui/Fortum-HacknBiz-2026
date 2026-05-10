@@ -31,12 +31,25 @@ function toSimNodes(nodes: GraphNode[]): SimNode[] {
   }));
 }
 
-function toSimEdges(edges: GraphEdge[]): SimEdge[] {
-  return edges.map((e) => ({
-    source: e.from,
-    target: e.to,
-    weight: 1,
-  }));
+function toSimEdges(edges: GraphEdge[], nodes: GraphNode[]): SimEdge[] {
+  const byAddr = new Map<string, string>();
+  for (const n of nodes) {
+    if (n.address) byAddr.set(n.address, n.id);
+  }
+
+  return edges.map((e) => {
+    let sourceId = e.from || (e as any).source;
+    let targetId = e.to || (e as any).target;
+
+    if (byAddr.has(sourceId)) sourceId = byAddr.get(sourceId)!;
+    if (byAddr.has(targetId)) targetId = byAddr.get(targetId)!;
+
+    return {
+      source: sourceId,
+      target: targetId,
+      weight: 1,
+    };
+  });
 }
 
 export function GraphCanvas({ nodes, edges, selectedId, onSelectNode, onExpandNode, loading }: Props) {
@@ -81,15 +94,19 @@ export function GraphCanvas({ nodes, edges, selectedId, onSelectNode, onExpandNo
     const h = wrap.clientHeight || 600;
 
     const simNodes = toSimNodes(nodes);
-    const simEdges = toSimEdges(edges);
+    const simEdges = toSimEdges(edges, nodes);
 
     const sim = new ForceSimulation(simNodes, simEdges, w, h);
-    sim.warmup(80);
+    sim.warmup();
     syncPositions(simNodes, nodes);
     simRef.current = sim;
 
     hashRef.current.build(simNodes);
-    vpRef.current.reset();
+    // Auto-fit viewport to contain all nodes after warmup
+    const { zoom, panX, panY } = sim.fitView(w, h);
+    vpRef.current.scale = zoom;
+    vpRef.current.x = panX;
+    vpRef.current.y = panY;
   }, [nodes, edges, syncPositions]);
 
   // Render loop
@@ -251,6 +268,11 @@ export function GraphCanvas({ nodes, edges, selectedId, onSelectNode, onExpandNo
     setHoveredNode(null);
   }, []);
 
+  // Calculate density
+  const n = nodes.length;
+  const e = edges.length;
+  const density = n > 1 ? (2 * e) / (n * (n - 1)) : 0;
+
   return (
     <div
       ref={wrapRef}
@@ -298,6 +320,28 @@ export function GraphCanvas({ nodes, edges, selectedId, onSelectNode, onExpandNo
 
       {hoveredNode && (
         <NodeTooltip node={hoveredNode} x={tooltipPos.x} y={tooltipPos.y} />
+      )}
+
+      {n > 0 && (
+        <div style={{
+          position: 'absolute', top: 16, right: 16,
+          background: 'rgba(15, 23, 42, 0.85)', backdropFilter: 'blur(4px)',
+          border: '0.5px solid var(--color-border-tertiary)',
+          borderRadius: 6, padding: '6px 10px',
+          display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 4,
+          pointerEvents: 'none'
+        }}>
+          <div style={{ fontSize: 11, fontFamily: 'var(--font-mono)', color: 'var(--color-text-secondary)', display: 'flex', gap: 12 }}>
+            <span>Nodes: <span style={{ color: 'var(--color-text-primary)' }}>{n}</span></span>
+            <span>Edges: <span style={{ color: 'var(--color-text-primary)' }}>{e}</span></span>
+            <span>Density: <span style={{ color: density > 0.5 ? 'var(--color-text-warning)' : 'var(--color-text-primary)' }}>{density.toFixed(2)}</span></span>
+          </div>
+          {density > 0.5 && (
+            <div style={{ fontSize: 10, color: 'var(--color-text-warning)', marginTop: 2 }}>
+              Try filtering by min value to reduce clutter
+            </div>
+          )}
+        </div>
       )}
     </div>
   );

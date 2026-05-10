@@ -10,6 +10,25 @@ import type {
   GraphNode,
   Transaction,
 } from './types';
+import type { ScenarioScript } from './demo/types';
+
+export interface FreezeModalState {
+  open: boolean;
+  accountId: string;
+  amount: number;
+  token: string;
+  reason: string;
+  authority: string;
+  caseId: string;
+}
+
+export interface CustomerNotificationState {
+  visible: boolean;
+  channel: string;
+  subject: string;
+  amount: string;
+  time: string;
+}
 
 export interface Investigation {
   tx_id: string;
@@ -49,6 +68,8 @@ interface DashboardStore {
   setGraphWallet: (w: string) => void;
   graphHops: number;
   setGraphHops: (h: number) => void;
+  graphHighlightPath: string[];
+  setGraphHighlightPath: (ids: string[]) => void;
 
   // Agent events (streamed)
   agentEvents: AgentEvent[];
@@ -73,6 +94,33 @@ interface DashboardStore {
     injectionAttempts?: number;
     systemOk?: boolean;
   }) => void;
+
+  // Demo State
+  demoMode: boolean;
+  setDemoMode: (b: boolean) => void;
+  activeScenario: ScenarioScript | null;
+  setActiveScenario: (script: ScenarioScript | null) => void;
+  demoInvestigationReasons: string[];
+  setDemoInvestigationReasons: (reasons: string[]) => void;
+  demoInvestigationConfidence: number;
+  setDemoInvestigationConfidence: (v: number) => void;
+  addDemoAuditEntry: (entry: { event: string; severity: string }) => void;
+  freezeModal: FreezeModalState | null;
+  openFreezeModal: (payload: any) => void;
+  closeFreezeModal: () => void;
+  customerNotification: CustomerNotificationState | null;
+  showCustomerNotification: (payload: any) => void;
+  hideCustomerNotification: () => void;
+  scenarioComplete: ScenarioScript | null;
+  setScenarioComplete: (script: ScenarioScript | null) => void;
+  sarDraftVisible: boolean;
+  sarCaseId: string;
+  setSarDraftOpen: (caseId: string) => void;
+  closeSarDraft: () => void;
+  replayVisible: boolean;
+  setReplayVisible: (b: boolean) => void;
+  replayTimeMs: number;
+  setReplayTimeMs: (ms: number) => void;
 }
 
 export const useDashboardStore = create<DashboardStore>((set) => ({
@@ -102,6 +150,8 @@ export const useDashboardStore = create<DashboardStore>((set) => ({
   setGraphWallet: (graphWallet) => set({ graphWallet }),
   graphHops: 3,
   setGraphHops: (graphHops) => set({ graphHops }),
+  graphHighlightPath: [],
+  setGraphHighlightPath: (ids) => set({ graphHighlightPath: ids }),
 
   // Agent events
   agentEvents: [],
@@ -123,4 +173,36 @@ export const useDashboardStore = create<DashboardStore>((set) => ({
   injectionAttempts: 0,
   systemOk: true,
   setSystemStatus: (status) => set((s) => ({ ...s, ...status })),
+
+  // Demo State
+  demoMode: false,
+  setDemoMode: (b) => set({ demoMode: b }),
+  activeScenario: null,
+  setActiveScenario: (script) => set({ activeScenario: script }),
+  demoInvestigationReasons: [],
+  setDemoInvestigationReasons: (reasons) => set((s) => ({ demoInvestigationReasons: [...s.demoInvestigationReasons, ...reasons] })),
+  demoInvestigationConfidence: 0,
+  setDemoInvestigationConfidence: (v) => set({ demoInvestigationConfidence: v }),
+  addDemoAuditEntry: (entry) => set((s) => ({
+    activeInvestigation: s.activeInvestigation ? {
+      ...s.activeInvestigation,
+      audit: [...s.activeInvestigation.audit, { ...entry, timestamp: Date.now() / 1000 } as any]
+    } : null
+  })),
+  freezeModal: null,
+  openFreezeModal: (payload) => set({ freezeModal: { open: true, ...payload } }),
+  closeFreezeModal: () => set({ freezeModal: null }),
+  customerNotification: null,
+  showCustomerNotification: (payload) => set({ customerNotification: { visible: true, ...payload, time: new Date().toLocaleTimeString('en-GB', { hour12: false }) } }),
+  hideCustomerNotification: () => set({ customerNotification: null }),
+  scenarioComplete: null,
+  setScenarioComplete: (script) => set({ scenarioComplete: script }),
+  sarDraftVisible: false,
+  sarCaseId: '',
+  setSarDraftOpen: (caseId) => set({ sarDraftVisible: true, sarCaseId: caseId }),
+  closeSarDraft: () => set({ sarDraftVisible: false, sarCaseId: '' }),
+  replayVisible: false,
+  setReplayVisible: (b) => set({ replayVisible: b }),
+  replayTimeMs: 0,
+  setReplayTimeMs: (ms) => set({ replayTimeMs: ms }),
 }));

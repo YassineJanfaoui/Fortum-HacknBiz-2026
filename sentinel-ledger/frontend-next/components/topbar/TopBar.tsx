@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { ShieldAlert, Plus } from 'lucide-react';
+import { ShieldAlert, Plus, PlayCircle } from 'lucide-react';
 import { useDashboardStore } from '@/lib/store';
 
 interface Props {
@@ -9,7 +9,7 @@ interface Props {
 }
 
 export function TopBar({ onNewTx }: Props) {
-  const { agentsOnline, pendingHitlCount, injectionAttempts, systemOk } = useDashboardStore();
+  const { agentsOnline, pendingHitlCount, injectionAttempts, systemOk, demoMode, setDemoMode } = useDashboardStore();
   const [clock, setClock] = useState('');
 
   useEffect(() => {
@@ -63,6 +63,16 @@ export function TopBar({ onNewTx }: Props) {
       )}
 
       <div style={{ flex: 1 }} />
+
+      {/* Demo Mode Toggle */}
+      <button
+        onClick={() => setDemoMode(!demoMode)}
+        className={`btn ${demoMode ? 'btn-primary' : ''}`}
+        style={{ gap: 6 }}
+      >
+        <PlayCircle size={12} />
+        {demoMode ? 'Exit Demo' : 'Demo Mode'}
+      </button>
 
       {/* New Transaction button */}
       <button

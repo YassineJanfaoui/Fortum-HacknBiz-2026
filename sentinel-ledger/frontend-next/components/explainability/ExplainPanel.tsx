@@ -15,7 +15,7 @@ function ReasonIcon({ reason }: { reason: string }) {
 }
 
 export function ExplainPanel() {
-  const { activeInvestigation } = useDashboardStore();
+  const { activeInvestigation, demoMode, demoInvestigationReasons, demoInvestigationConfidence } = useDashboardStore();
 
   if (!activeInvestigation) {
     return (
@@ -31,7 +31,9 @@ export function ExplainPanel() {
     );
   }
 
-  const { reasons, confidence, governance_decision } = activeInvestigation;
+  const { governance_decision } = activeInvestigation;
+  const reasons = demoMode ? demoInvestigationReasons : activeInvestigation.reasons;
+  const confidence = demoMode ? demoInvestigationConfidence : activeInvestigation.confidence;
   const decisionLabel = String(governance_decision).replace(/_/g, ' ');
   const decisionColor =
     String(governance_decision).includes('BLOCK') || String(governance_decision).includes('INJECT')

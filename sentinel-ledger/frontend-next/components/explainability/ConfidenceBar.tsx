@@ -3,7 +3,8 @@ interface Props {
 }
 
 export function ConfidenceBar({ confidence }: Props) {
-  const clamped = Math.min(100, Math.max(0, confidence));
+  const safeConfidence = Number.isFinite(confidence) ? confidence : 0;
+  const clamped = Math.min(100, Math.max(0, safeConfidence));
   const color =
     clamped >= 80 ? 'var(--color-text-danger)'
     : clamped >= 50 ? 'var(--color-text-warning)'
@@ -15,8 +16,8 @@ export function ConfidenceBar({ confidence }: Props) {
         <span style={{ color: 'var(--color-text-secondary)' }}>Risk Confidence</span>
         <span style={{ color, fontVariantNumeric: 'tabular-nums', fontWeight: 700 }}>{clamped}%</span>
       </div>
-      <div className="confidence-bar">
-        <div className="confidence-fill" style={{ width: `${clamped}%`, background: `linear-gradient(90deg, ${color}, ${color}cc)` }} />
+      <div style={{ width: '100%', height: 6, background: 'var(--color-background-secondary)', borderRadius: 3, overflow: 'hidden' }}>
+        <div style={{ width: `${clamped}%`, height: '100%', background: color, borderRadius: 3, transition: 'width 500ms ease' }} />
       </div>
     </div>
   );

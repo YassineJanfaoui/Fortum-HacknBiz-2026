@@ -89,8 +89,8 @@ export function traceToSubgraph(
       ? `${n.address.slice(0, 6)}…${n.address.slice(-4)}`
       : n.address,
     type: categoryToType(n.category, n.address.toLowerCase() === seedAddress.toLowerCase()),
-    risk: scoreToRisk(n.risk_score),
-    taint: Math.round(n.risk_score * 100),
+    risk: scoreToRisk(n.risk_score / 100),
+    taint: Math.round(n.risk_score),
     tx_count: n.tx_count ?? 1,
     age_days: 0,
     entity_label: n.label && n.label !== n.address ? n.label : undefined,

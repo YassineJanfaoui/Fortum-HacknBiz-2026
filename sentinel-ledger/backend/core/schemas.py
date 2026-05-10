@@ -8,9 +8,9 @@ import re
 # ============ INPUT ============
 
 class Transaction(BaseModel):
-    tx_id: str = Field(..., min_length=1, max_length=64)
-    wallet_from: str = Field(..., min_length=10, max_length=64)
-    wallet_to: str = Field(..., min_length=10, max_length=64)
+    tx_id: str = Field(..., min_length=1, max_length=80)   # 0x + 64 hex = 66 chars
+    wallet_from: str = Field(..., min_length=10, max_length=42)  # EVM: 0x + 40 hex
+    wallet_to: str = Field(..., min_length=10, max_length=42)
     amount_eur: float = Field(..., ge=0, le=1_000_000_000)
     token: str = Field("ETH", max_length=20)
     chain: str = Field("ethereum", max_length=20)
