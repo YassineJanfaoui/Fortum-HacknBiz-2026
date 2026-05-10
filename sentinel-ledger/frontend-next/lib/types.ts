@@ -1,5 +1,5 @@
 export type RiskLevel = 'low' | 'medium' | 'high' | 'critical';
-export type WalletType = 'origin' | 'mixer' | 'sanctioned' | 'exchange' | 'wallet' | 'cluster';
+export type WalletType = 'origin' | 'mixer' | 'sanctioned' | 'exchange' | 'wallet' | 'cluster' | 'root' | 'suspicious' | 'dex' | 'address' | 'contract';
 export type GovernanceDecision = 'AUTO_APPROVE' | 'ESCALATE_HUMAN' | 'BLOCKED_INJECTION';
 export type TxStatus = 'pending' | 'approved' | 'rejected' | 'escalated' | 'blocked';
 export type AgentState = 'active' | 'warn' | 'blocked' | 'idle';
@@ -17,6 +17,11 @@ export interface Transaction {
   risk_pct: number;
   status: TxStatus;
   governance_decision?: GovernanceDecision;
+  chain?: string;
+  jurisdiction?: string;
+  velocity_24h?: number;
+  tx_count_7d?: number;
+  memo?: string;
 }
 
 export interface GraphNode {
@@ -29,6 +34,7 @@ export interface GraphNode {
   tx_count: number;
   age_days: number;
   entity_label?: string;
+  label?: string;
   cluster_id?: string;
   // Physics state (mutable during simulation)
   x: number;
@@ -45,6 +51,8 @@ export interface GraphEdge {
   amount_eur: number;
   timestamp: number;
   tx_hash: string;
+  valueEth?: number;
+  tags?: string[];
 }
 
 export interface InvestigationDetail {

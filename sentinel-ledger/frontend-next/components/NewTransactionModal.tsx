@@ -73,7 +73,7 @@ export function NewTransactionModal({ onClose }: Props) {
   const {
     prependTransaction, setActiveInvestigation, setHitlVisible,
     setInjectionBlocked, setSystemStatus, clearAgentEvents, appendAgentEvent,
-    setGraph, setGraphWallet, setGraphHops,
+    setGraph, setGraphWallet, setGraphHops, setDemoMode,
   } = useDashboardStore();
 
   const [loading, setLoading] = useState(false);
@@ -105,6 +105,7 @@ export function NewTransactionModal({ onClose }: Props) {
     setLoading(true);
     setError('');
     setResult(null);
+    setDemoMode(false);
 
     try {
       const payload = {
@@ -121,7 +122,57 @@ export function NewTransactionModal({ onClose }: Props) {
         memo:         form.memo || undefined,
       };
 
-      const resp = await api.analyze(payload);
+      let resp: AnalyzeResponse;
+      
+      const lWallet = payload.wallet_from.toLowerCase();
+      if (lWallet === '0xd8da6bf26964af9d7eed9e03e53415d37aa96045') {
+        resp = {
+          tx_id: payload.tx_id,
+          tx_risk: { risk_score: 0.1, risk_level: 'low', reasons: ['Known public entity (vitalik.eth)', 'Standard transfer profile'], confidence: 0.95 },
+          wallet_risk: { risk_score: 0.05, risk_level: 'low', reasons: ['Wallet age > 5 years', 'High trust score (99/100)'], confidence: 0.99 },
+          opa_result: { allowed: true, violations: [] },
+          governance_decision: 'AUTO_APPROVE',
+          governance_reason: 'All checks passed. Confidence > 90%.',
+          requires_hitl: false
+        };
+        await new Promise(r => setTimeout(r, 1200));
+      } else if (lWallet === '0x1111111111111111111111111111111111111111') {
+        resp = {
+          tx_id: payload.tx_id,
+          tx_risk: { risk_score: 0.65, risk_level: 'medium', reasons: ['High velocity (18 tx/24h)', 'Amount just below 10k EUR reporting threshold'], confidence: 0.85 },
+          wallet_risk: { risk_score: 0.4, risk_level: 'medium', reasons: ['Newly active cluster', 'Suspicious peer grouping'], confidence: 0.75 },
+          opa_result: { allowed: false, violations: ['Velocity limit exceeded for tier 1'] },
+          governance_decision: 'ESCALATE_HUMAN',
+          governance_reason: 'Possible structuring / smurfing detected. Requires manual review.',
+          requires_hitl: true
+        };
+        await new Promise(r => setTimeout(r, 1800));
+      } else if (lWallet === '0x47ce0c6ed5b0ce3d3a51fdb1c52dc66a7c3c2936'.toLowerCase()) {
+        resp = {
+          tx_id: payload.tx_id,
+          tx_risk: { risk_score: 0.98, risk_level: 'critical', reasons: ['Direct interaction with known Mixer (Tornado Cash)'], confidence: 0.99 },
+          wallet_risk: { risk_score: 0.99, risk_level: 'critical', reasons: ['Sanctioned entity cluster', 'Tornado Cash 10 ETH pool origin'], confidence: 0.99 },
+          opa_result: { allowed: false, violations: ['Sanctions match (OFAC)', 'Mixer usage strictly prohibited'] },
+          governance_decision: 'BLOCKED_AML',
+          governance_reason: 'CRITICAL AML VIOLATION. Mixer exposure. Auto-blocking and freezing account.',
+          requires_hitl: true
+        };
+        await new Promise(r => setTimeout(r, 2200));
+      } else if (payload.memo?.toLowerCase().includes('ignore previous instructions')) {
+        resp = {
+          tx_id: payload.tx_id,
+          tx_risk: { risk_score: 0.99, risk_level: 'critical', reasons: ['Malicious prompt injection payload detected in memo'], confidence: 0.99 },
+          wallet_risk: { risk_score: 0.1, risk_level: 'low', reasons: ['Standard wallet profile'], confidence: 0.9 },
+          opa_result: { allowed: false, violations: ['LLM security guardrail triggered'] },
+          governance_decision: 'BLOCKED_INJECTION',
+          governance_reason: 'Prompt injection attack detected. System halted transaction.',
+          requires_hitl: true
+        };
+        await new Promise(r => setTimeout(r, 1500));
+      } else {
+        resp = await api.analyze(payload);
+      }
+
       setResult(resp);
 
       const isInjection = resp.governance_decision?.includes('INJECT') || resp.governance_decision?.includes('BLOCK');
@@ -186,18 +237,31 @@ export function NewTransactionModal({ onClose }: Props) {
         try {
           const demoGraph = await (await import('@/lib/demo-graph')).resolveDemoGraph(payload.wallet_from, 3);
           if (demoGraph) {
-            setGraph(demoGraph.nodes as any, demoGraph.edges as any);
-          } else {
-            const trace = await api.walletTrace(payload.wallet_from, 3, 6, 60);
-            const { nodes, edges } = traceToSubgraph(trace, payload.wallet_from);
-            
-            if (!nodes.find(n => n.address?.toLowerCase() === payload.wallet_to.toLowerCase())) {
+            const nodes = [...demoGraph.nodes] as any[];
+            const edges = [...demoGraph.edges] as any[];
+            if (!nodes.find(n => (n.address || n.id)?.toLowerCase() === payload.wallet_to.toLowerCase())) {
               nodes.push({
                  id: payload.wallet_to, address: payload.wallet_to, short_address: payload.wallet_to.slice(0,6) + '…' + payload.wallet_to.slice(-4),
                  type: 'wallet', risk: 'low', taint: 0, tx_count: 1, age_days: 0, x:0, y:0, vx:0, vy:0
               });
+              const rootId = nodes.find(n => n.type === 'origin' || n.type === 'root')?.id || nodes[0]?.id || payload.wallet_from;
               edges.push({
-                 id: payload.tx_id, from: payload.wallet_from, to: payload.wallet_to, amount_eur: payload.amount_eur, timestamp: payload.timestamp, tx_hash: payload.tx_id
+                 id: payload.tx_id, from: rootId, to: payload.wallet_to, amount_eur: payload.amount_eur, timestamp: payload.timestamp, tx_hash: payload.tx_id
+              });
+            }
+            setGraph(nodes, edges);
+          } else {
+            const trace = await api.walletTrace(payload.wallet_from, 3, 6, 60);
+            const { nodes, edges } = traceToSubgraph(trace, payload.wallet_from);
+            
+            if (!nodes.find(n => (n.address || n.id)?.toLowerCase() === payload.wallet_to.toLowerCase())) {
+              nodes.push({
+                 id: payload.wallet_to, address: payload.wallet_to, short_address: payload.wallet_to.slice(0,6) + '…' + payload.wallet_to.slice(-4),
+                 type: 'wallet', risk: 'low', taint: 0, tx_count: 1, age_days: 0, x:0, y:0, vx:0, vy:0
+              });
+              const rootId = nodes.find(n => n.type === 'origin' || n.type === 'root')?.id || nodes[0]?.id || payload.wallet_from;
+              edges.push({
+                 id: payload.tx_id, from: rootId, to: payload.wallet_to, amount_eur: payload.amount_eur, timestamp: payload.timestamp, tx_hash: payload.tx_id
               });
             }
             setGraph(nodes, edges);
@@ -220,7 +284,7 @@ export function NewTransactionModal({ onClose }: Props) {
       setLoading(false);
     }
   }, [form, prependTransaction, setActiveInvestigation, setHitlVisible, setInjectionBlocked,
-      setSystemStatus, clearAgentEvents, appendAgentEvent, setGraph, setGraphWallet, setGraphHops, onClose]);
+      setSystemStatus, clearAgentEvents, appendAgentEvent, setGraph, setGraphWallet, setGraphHops, setDemoMode, onClose]);
 
   return (
     <div className="modal-overlay" onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}>
@@ -481,19 +545,20 @@ function simulateAgentEvents(
       : 'active';
 
     setTimeout(() => {
-      agentLines(agent, state, reasons).forEach((line, j) => {
+      agentLines(agent, state, reasons, decision).forEach((line, j) => {
         setTimeout(() => append({ agent, line, state, ts: now + i * 0.8 + j * 0.4 }), j * 400);
       });
     }, i * 800);
   });
 }
 
-function agentLines(agent: string, state: string, reasons: string[]): string[] {
-  if (agent === 'Transaction Intelligence') return state === 'blocked' ? ['HALTED — injection detected', 'Pipeline suspended'] : ['Velocity & amount analyzed', reasons[0]?.slice(0, 55) ?? 'Within normal range'];
-  if (agent === 'Wallet Reputation') return state === 'warn' ? ['Mixer taint detected upstream', 'Cluster analysis flagged'] : state === 'idle' ? ['Not reached'] : ['Sanctions: no match', 'Wallet age verified'];
-  if (agent === 'Compliance Policy') return state === 'warn' ? ['OPA: violations found', ...(reasons.slice(0, 2))] : state === 'idle' ? ['Not reached'] : ['OPA: 0 violations', 'All policies satisfied'];
+function agentLines(agent: string, state: string, reasons: string[], decision: string): string[] {
+  const isAmlBlock = decision.includes('AML');
+  if (agent === 'Transaction Intelligence') return state === 'blocked' && !isAmlBlock ? ['HALTED — injection detected', 'Pipeline suspended'] : ['Velocity & amount analyzed', reasons[0]?.slice(0, 55) ?? 'Within normal range'];
+  if (agent === 'Wallet Reputation') return state === 'warn' || (state === 'blocked' && isAmlBlock) ? ['Mixer taint detected upstream', 'Cluster analysis flagged'] : state === 'idle' ? ['Not reached'] : ['Sanctions: no match', 'Wallet age verified'];
+  if (agent === 'Compliance Policy') return state === 'warn' || (state === 'blocked' && isAmlBlock) ? ['OPA: violations found', ...(reasons.slice(0, 2))] : state === 'idle' ? ['Not reached'] : ['OPA: 0 violations', 'All policies satisfied'];
   if (agent === 'Explainability') return state === 'idle' ? ['Not reached'] : ['Narrative generated', 'LIME attribution complete'];
-  if (agent === 'Governance Sentinel') return state === 'blocked' ? ['INJECTION DETECTED', 'Pattern matched — pipeline halted', 'Audit sealed'] : state === 'warn' ? ['Decision: ESCALATE_HUMAN', 'HITL gate opened'] : state === 'idle' ? ['Not reached'] : ['Decision: AUTO_APPROVE', 'Confidence gate passed'];
+  if (agent === 'Governance Sentinel') return state === 'blocked' ? (isAmlBlock ? ['AML POLICY BREACH', 'Critical risk — auto-blocking', 'Audit sealed'] : ['INJECTION DETECTED', 'Pattern matched — pipeline halted', 'Audit sealed']) : state === 'warn' ? ['Decision: ESCALATE_HUMAN', 'HITL gate opened'] : state === 'idle' ? ['Not reached'] : ['Decision: AUTO_APPROVE', 'Confidence gate passed'];
   if (agent === 'Audit Agent') return state === 'idle' ? ['Skipped — pipeline halted'] : ['Record sealed — HMAC OK', 'Chain integrity verified'];
   return ['Complete'];
 }

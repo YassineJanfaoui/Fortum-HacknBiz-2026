@@ -223,19 +223,20 @@ function simulateAgentEvents(
       : 'active';
 
     setTimeout(() => {
-      agentLines(agent, state, reasons).forEach((line, j) => {
+      agentLines(agent, state, reasons, decision).forEach((line, j) => {
         setTimeout(() => append({ agent, line, state, ts: now + i * 0.8 + j * 0.4 }), j * 400);
       });
     }, i * 800);
   });
 }
 
-function agentLines(agent: string, state: string, reasons: string[]): string[] {
-  if (agent === 'Transaction Intelligence') return state === 'blocked' ? ['HALTED — injection detected', 'Pipeline suspended'] : ['Velocity & amount analyzed', reasons[0]?.slice(0, 55) ?? 'Within normal range'];
-  if (agent === 'Wallet Reputation') return state === 'warn' ? ['Mixer taint detected upstream', 'Cluster analysis flagged'] : state === 'idle' ? ['Not reached'] : ['Sanctions: no match', 'Wallet age verified'];
-  if (agent === 'Compliance Policy') return state === 'warn' ? ['OPA: 3 violations found', ...(reasons.slice(0, 2))] : state === 'idle' ? ['Not reached'] : ['OPA: 0 violations', 'All policies satisfied'];
+function agentLines(agent: string, state: string, reasons: string[], decision: string): string[] {
+  const isAmlBlock = decision.includes('AML');
+  if (agent === 'Transaction Intelligence') return state === 'blocked' && !isAmlBlock ? ['HALTED — injection detected', 'Pipeline suspended'] : ['Velocity & amount analyzed', reasons[0]?.slice(0, 55) ?? 'Within normal range'];
+  if (agent === 'Wallet Reputation') return state === 'warn' || (state === 'blocked' && isAmlBlock) ? ['Mixer taint detected upstream', 'Cluster analysis flagged'] : state === 'idle' ? ['Not reached'] : ['Sanctions: no match', 'Wallet age verified'];
+  if (agent === 'Compliance Policy') return state === 'warn' || (state === 'blocked' && isAmlBlock) ? ['OPA: violations found', ...(reasons.slice(0, 2))] : state === 'idle' ? ['Not reached'] : ['OPA: 0 violations', 'All policies satisfied'];
   if (agent === 'Explainability') return state === 'idle' ? ['Not reached'] : ['Narrative generated', 'LIME attribution complete'];
-  if (agent === 'Governance Sentinel') return state === 'blocked' ? ['INJECTION DETECTED', 'Pattern matched — pipeline halted', 'Audit sealed'] : state === 'warn' ? ['Decision: ESCALATE_HUMAN', 'HITL gate opened'] : state === 'idle' ? ['Not reached'] : ['Decision: AUTO_APPROVE', 'Confidence gate passed'];
+  if (agent === 'Governance Sentinel') return state === 'blocked' ? (isAmlBlock ? ['AML POLICY BREACH', 'Critical risk — auto-blocking', 'Audit sealed'] : ['INJECTION DETECTED', 'Pattern matched — pipeline halted', 'Audit sealed']) : state === 'warn' ? ['Decision: ESCALATE_HUMAN', 'HITL gate opened'] : state === 'idle' ? ['Not reached'] : ['Decision: AUTO_APPROVE', 'Confidence gate passed'];
   if (agent === 'Audit Agent') return state === 'idle' ? ['Skipped — pipeline halted'] : ['Record sealed — HMAC OK', 'Chain integrity verified'];
   return ['Complete'];
 }
