@@ -21,10 +21,19 @@ export function WalletGraph() {
     try {
       const trace = await api.walletTrace(address, hops, 8, 120);
       const { nodes, edges } = traceToSubgraph(trace, address);
+      if (nodes.length === 0) {
+        nodes.push({
+          id: address, address: address, short_address: address.slice(0, 6) + '…' + address.slice(-4),
+          type: 'wallet', risk: 'low', taint: 0, tx_count: 1, age_days: 0, x: 0, y: 0, vx: 0, vy: 0
+        });
+      }
       setGraph(nodes, edges);
     } catch {
-      // Show empty state on error
-      setGraph([], []);
+      // Show safe state on error or empty trace
+      setGraph([{
+        id: address, address: address, short_address: address.slice(0, 6) + '…' + address.slice(-4),
+        type: 'wallet', risk: 'low', taint: 0, tx_count: 1, age_days: 0, x: 0, y: 0, vx: 0, vy: 0
+      }], []);
     } finally {
       setGraphLoading(false);
     }

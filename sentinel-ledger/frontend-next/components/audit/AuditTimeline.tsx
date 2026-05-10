@@ -8,7 +8,7 @@ export function AuditTimeline() {
   const records = activeInvestigation?.audit ?? [];
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', overflow: 'hidden', borderBottom: '0.5px solid var(--color-border-tertiary)' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', overflow: 'hidden', borderBottom: '0.5px solid var(--color-border-tertiary)', height: '100%' }}>
       <div className="panel-hd">
         Audit Trail
         {records.length > 0 && (

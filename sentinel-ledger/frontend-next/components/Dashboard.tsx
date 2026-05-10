@@ -39,23 +39,18 @@ export function Dashboard() {
 
   return (
     <>
-      <div style={{
-        display: 'grid',
+      <div className="flex flex-col md:grid h-[100dvh] w-full overflow-y-auto md:overflow-hidden bg-[var(--color-background-tertiary)]" style={{
         gridTemplateRows: '44px 1fr',
         gridTemplateColumns: '260px minmax(0, 1fr) 280px',
         gridTemplateAreas: '"topbar topbar topbar" "feed graph right"',
-        height: '100vh',
-        width: '100%',
-        overflow: 'hidden',
-        background: 'var(--color-background-tertiary)',
       }}>
         <TopBar onNewTx={() => setShowModal(true)} />
 
-        <div style={{ gridArea: 'feed', overflow: 'hidden', minWidth: 0 }}>
+        <div className="h-[400px] md:h-auto border-b border-[var(--color-border-tertiary)] md:border-b-0" style={{ gridArea: 'feed', overflow: 'hidden', minWidth: 0 }}>
           {demoMode ? <DemoPanel /> : <TransactionFeed />}
         </div>
 
-        <main style={{
+        <main className="h-[500px] md:h-auto border-b md:border-b-0 border-[var(--color-border-tertiary)]" style={{
           gridArea: 'graph',
           overflow: 'hidden',
           minWidth: 0,
@@ -68,18 +63,17 @@ export function Dashboard() {
           <WalletGraph />
         </main>
 
-        <aside style={{
+        <aside className="flex flex-col md:grid border-b border-[var(--color-border-tertiary)] md:border-b-0" style={{
           gridArea: 'right',
-          display: 'grid',
           gridTemplateRows: hitlVisible ? '1fr 170px 190px 52px' : '1fr 170px 190px',
           overflow: 'hidden',
           minWidth: 0,
           background: 'var(--color-background-primary)',
         }}>
-          <AgentFeed />
-          <ExplainPanel />
-          <AuditTimeline />
-          {hitlVisible && <HITLBar />}
+          <div className="h-[300px] md:h-auto overflow-hidden"><AgentFeed /></div>
+          <div className="h-[200px] md:h-auto overflow-hidden"><ExplainPanel /></div>
+          <div className="h-[200px] md:h-auto overflow-hidden"><AuditTimeline /></div>
+          {hitlVisible && <div className="h-auto md:h-auto overflow-hidden"><HITLBar /></div>}
         </aside>
       </div>
 

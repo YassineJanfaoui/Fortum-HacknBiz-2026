@@ -27,7 +27,9 @@ async def _get(params: dict) -> dict:
             await asyncio.sleep(_MIN_INTERVAL - elapsed)
         _last_call[0] = time.monotonic()
 
-    params = {"chainid": "1", **params, "apikey": settings.ETHERSCAN_API_KEY}
+    params = {"chainid": "1", **params}
+    if settings.ETHERSCAN_API_KEY:
+        params["apikey"] = settings.ETHERSCAN_API_KEY
     try:
         async with httpx.AsyncClient(timeout=10.0) as client:
             r = await client.get(BASE_URL, params=params)
@@ -42,7 +44,7 @@ def _generate_mock_txs(wallet: str) -> list[dict]:
     mock_txs = []
     now = int(time.time())
     
-    hop1_wallets = [f"0xHop1_{i:04x}{wallet[-6:]}" for i in range(8)]
+    hop1_wallets = [f"0x111111111111111111111111111111111111{i:04x}" for i in range(8)]
     for h1 in hop1_wallets:
         for _ in range(random.randint(1, 3)):
             is_inbound = random.choice([True, False])
@@ -54,7 +56,7 @@ def _generate_mock_txs(wallet: str) -> list[dict]:
             })
     
     for h1 in hop1_wallets:
-        hop2_wallets = [f"0xHop2_{i:04x}{h1[-6:]}" for i in range(3)]
+        hop2_wallets = [f"0x222222222222222222222222222222222222{i:04x}" for i in range(3)]
         for h2 in hop2_wallets:
             for _ in range(random.randint(1, 2)):
                 is_inbound = random.choice([True, False])

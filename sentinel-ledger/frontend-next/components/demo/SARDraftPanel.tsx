@@ -8,7 +8,7 @@ export function SARDraftPanel() {
 
   return (
     <div style={{
-      position: 'fixed', top: 44, right: 0, bottom: 0, width: 400, zIndex: 9000,
+      position: 'fixed', top: 44, right: 0, bottom: 0, width: 400, maxWidth: '100vw', zIndex: 9000,
       background: 'var(--color-background-primary)',
       borderLeft: '1px solid var(--color-border-tertiary)',
       boxShadow: '-10px 0 30px rgba(0,0,0,0.2)',

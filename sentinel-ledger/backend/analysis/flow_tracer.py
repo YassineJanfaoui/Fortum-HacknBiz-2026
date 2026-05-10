@@ -280,9 +280,12 @@ async def trace_wallet_flows(address: str, depth: int = 3, fanout: int = 6, limi
             for tx in history:
                 src = _lower(tx.get("from"))
                 dst = _lower(tx.get("to"))
-                if src != wallet or not _is_evm_address(dst) or dst == wallet:
+                if not _is_evm_address(src) or not _is_evm_address(dst):
                     continue
-                grouped[dst].append(tx)
+                if src == wallet and dst != wallet:
+                    grouped[dst].append(tx)
+                elif dst == wallet and src != wallet:
+                    grouped[src].append(tx)
             ranked = sorted(
                 grouped.items(),
                 key=lambda item: sum(_wei_to_eth(tx.get("value")) for tx in item[1]),
@@ -293,8 +296,14 @@ async def trace_wallet_flows(address: str, depth: int = 3, fanout: int = 6, limi
             for target, txs in ranked:
                 amount_eth = sum(_wei_to_eth(tx.get("value")) for tx in txs)
                 out_volume += amount_eth
-                edge = _make_edge(wallet, target, amount_eth, txs, current_depth, fanout_count)
-                edges[(wallet, target, current_depth)] = edge
+                
+                # Determine direction for the edge based on the first tx
+                is_outbound = _lower(txs[0].get("from")) == wallet
+                real_src = wallet if is_outbound else target
+                real_dst = target if is_outbound else wallet
+                
+                edge = _make_edge(real_src, real_dst, amount_eth, txs, current_depth, fanout_count)
+                edges[(real_src, real_dst, current_depth)] = edge
                 if target not in node_depth:
                     node_depth[target] = current_depth
                     next_frontier.append(target)

@@ -22,7 +22,7 @@ export function TopBar({ onNewTx }: Props) {
   const alertCount = pendingHitlCount + injectionAttempts;
 
   return (
-    <header style={{
+    <header className="flex-wrap md:flex-nowrap min-h-[44px] py-2 md:py-0" style={{
       gridArea: 'topbar',
       display: 'flex', alignItems: 'center', gap: 14,
       padding: '0 16px',

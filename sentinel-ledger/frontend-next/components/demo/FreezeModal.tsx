@@ -28,7 +28,7 @@ export function FreezeModal() {
         </div>
 
         <div style={{ padding: 24, display: 'flex', flexDirection: 'column', gap: 16, fontSize: 13, color: 'var(--color-text-secondary)' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '120px minmax(0, 1fr)', gap: 8 }}>
+          <div className="grid grid-cols-1 md:grid-cols-[120px_minmax(0,1fr)] gap-2">
             <span>Account ID:</span>
             <span style={{ color: 'var(--color-text-primary)', fontFamily: 'var(--font-mono)', wordBreak: 'break-all' }}>{freezeModal.accountId}</span>
             
@@ -58,17 +58,13 @@ export function FreezeModal() {
             </div>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginTop: 8 }}>
+          <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-[12px] mt-2">
             <span>Operator e-signature:</span>
             <input type="text" placeholder="Type name to sign..." className="input" style={{ flex: 1 }} />
           </div>
         </div>
 
-        <div style={{
-          padding: '16px 24px', borderTop: '1px solid var(--color-border-tertiary)',
-          background: 'var(--color-background-secondary)', display: 'flex', justifyContent: 'flex-end', gap: 12,
-          borderBottomLeftRadius: 8, borderBottomRightRadius: 8
-        }}>
+        <div className="flex flex-col md:flex-row justify-end gap-3 p-4 md:px-6 md:py-4 bg-[var(--color-background-secondary)] border-t border-[var(--color-border-tertiary)] rounded-b-lg">
           <button className="btn" onClick={closeFreezeModal}>Cancel</button>
           <button className="btn btn-primary" style={{ background: 'var(--color-text-danger)' }} onClick={closeFreezeModal}>
             Confirm freeze + file

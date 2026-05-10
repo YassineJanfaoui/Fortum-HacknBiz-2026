@@ -137,6 +137,7 @@ export function TransactionFeed() {
       display: 'flex', flexDirection: 'column', overflow: 'hidden',
       background: 'var(--color-background-primary)',
       borderRight: '0.5px solid var(--color-border-tertiary)',
+      height: '100%',
     }}>
       {/* Header */}
       <div className="panel-hd">

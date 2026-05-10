@@ -82,6 +82,10 @@ export function traceToSubgraph(
     return 'low';
   };
 
+  if (!trace || !trace.graph || !Array.isArray(trace.graph.nodes)) {
+    return { nodes: [], edges: [] };
+  }
+
   const nodes: GraphNode[] = trace.graph.nodes.map((n) => ({
     id: n.id,
     address: n.address,
@@ -101,14 +105,14 @@ export function traceToSubgraph(
   }));
 
   const now = Date.now() / 1000;
-  const edges: GraphEdge[] = trace.graph.edges.map((e) => ({
+  const edges: GraphEdge[] = Array.isArray(trace.graph.edges) ? trace.graph.edges.map((e) => ({
     id: e.id,
     from: e.source,
     to: e.target,
     amount_eur: (e.amount_eth ?? 0) * 3000,
     timestamp: e.latest_timestamp ?? now,
     tx_hash: e.id,
-  }));
+  })) : [];
 
   return { nodes, edges };
 }

@@ -247,7 +247,7 @@ export function NewTransactionModal({ onClose }: Props) {
           <div style={{ fontSize: 10, color: 'var(--color-text-tertiary)', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase' }}>
             Quick-fill demo scenario
           </div>
-          <div style={{ display: 'flex', gap: 6 }}>
+          <div className="flex flex-col md:flex-row gap-[6px]">
             {DEMO_SCENARIOS.map((scenario) => (
               <button
                 key={scenario.name}
@@ -299,7 +299,7 @@ export function NewTransactionModal({ onClose }: Props) {
           </div>
 
           {/* Wallets */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-[10px]">
             <div>
               <label className="form-label">wallet_from *</label>
               <input
@@ -323,7 +323,7 @@ export function NewTransactionModal({ onClose }: Props) {
           </div>
 
           {/* Amount + Token + Chain */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 10 }}>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-[10px]">
             <div>
               <label className="form-label">amount_eur (€) *</label>
               <input
@@ -351,7 +351,7 @@ export function NewTransactionModal({ onClose }: Props) {
           </div>
 
           {/* Timestamp + Jurisdiction */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-[10px]">
             <div>
               <label className="form-label">timestamp (unix)</label>
               <input
@@ -371,7 +371,7 @@ export function NewTransactionModal({ onClose }: Props) {
           </div>
 
           {/* Risk signals */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-[10px]">
             <div>
               <label className="form-label">velocity_24h (tx count)</label>
               <input
