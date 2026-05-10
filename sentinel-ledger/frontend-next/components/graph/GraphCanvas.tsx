@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import type { GraphEdge, GraphNode } from '@/lib/types';
 import { ForceSimulation } from './engine/ForceSimulation';
 import { SpatialHash } from './engine/HitTest';
-import { nodeRadius, renderFrame } from './engine/Renderer';
+import { getNodeRadius, renderFrame } from './engine/Renderer';
 import { Viewport } from './engine/Viewport';
 import type { SimEdge, SimNode } from './engine/types';
 import { NodeTooltip } from './NodeTooltip';
@@ -25,8 +25,8 @@ function toSimNodes(nodes: GraphNode[]): SimNode[] {
     y: n.y ?? 0,
     vx: n.vx ?? 0,
     vy: n.vy ?? 0,
-    radius: nodeRadius(n.tx_count),
-    mass: Math.max(1, Math.log(Math.max(1, n.tx_count))),
+    radius: getNodeRadius(n),
+    mass: Math.max(1, Math.log(Math.max(1, n.tx_count ?? 1))),
     pinned: n.pinned ?? false,
   }));
 }

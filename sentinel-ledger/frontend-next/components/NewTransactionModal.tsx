@@ -184,19 +184,24 @@ export function NewTransactionModal({ onClose }: Props) {
         setGraphWallet(payload.wallet_from);
         setGraphHops(3);
         try {
-          const trace = await api.walletTrace(payload.wallet_from, 3, 6, 60);
-          const { nodes, edges } = traceToSubgraph(trace, payload.wallet_from);
-          
-          if (!nodes.find(n => n.address.toLowerCase() === payload.wallet_to.toLowerCase())) {
-            nodes.push({
-               id: payload.wallet_to, address: payload.wallet_to, short_address: payload.wallet_to.slice(0,6) + '…' + payload.wallet_to.slice(-4),
-               type: 'wallet', risk: 'low', taint: 0, tx_count: 1, age_days: 0, x:0, y:0, vx:0, vy:0
-            });
-            edges.push({
-               id: payload.tx_id, from: payload.wallet_from, to: payload.wallet_to, amount_eur: payload.amount_eur, timestamp: payload.timestamp, tx_hash: payload.tx_id
-            });
+          const demoGraph = await (await import('@/lib/demo-graph')).resolveDemoGraph(payload.wallet_from, 3);
+          if (demoGraph) {
+            setGraph(demoGraph.nodes as any, demoGraph.edges as any);
+          } else {
+            const trace = await api.walletTrace(payload.wallet_from, 3, 6, 60);
+            const { nodes, edges } = traceToSubgraph(trace, payload.wallet_from);
+            
+            if (!nodes.find(n => n.address?.toLowerCase() === payload.wallet_to.toLowerCase())) {
+              nodes.push({
+                 id: payload.wallet_to, address: payload.wallet_to, short_address: payload.wallet_to.slice(0,6) + '…' + payload.wallet_to.slice(-4),
+                 type: 'wallet', risk: 'low', taint: 0, tx_count: 1, age_days: 0, x:0, y:0, vx:0, vy:0
+              });
+              edges.push({
+                 id: payload.tx_id, from: payload.wallet_from, to: payload.wallet_to, amount_eur: payload.amount_eur, timestamp: payload.timestamp, tx_hash: payload.tx_id
+              });
+            }
+            setGraph(nodes, edges);
           }
-          setGraph(nodes, edges);
         } catch {
           // Fallback if Etherscan tracing fails or hits rate limit
           setGraph([
@@ -477,9 +482,9 @@ function simulateAgentEvents(
 
     setTimeout(() => {
       agentLines(agent, state, reasons).forEach((line, j) => {
-        setTimeout(() => append({ agent, line, state, ts: now + i * 0.5 + j * 0.1 }), j * 100);
+        setTimeout(() => append({ agent, line, state, ts: now + i * 0.8 + j * 0.4 }), j * 400);
       });
-    }, i * 350);
+    }, i * 800);
   });
 }
 

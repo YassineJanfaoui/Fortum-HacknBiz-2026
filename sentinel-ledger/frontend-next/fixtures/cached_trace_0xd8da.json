@@ -1,0 +1,1666 @@
+{
+  "meta": {
+    "name": "Cached Subgraph (High Volume)",
+    "root": "0xd8da6bf26964af9d7eed9e03e53415d37aa96045",
+    "rootLabel": "ENS Target",
+    "generatedAt": "2026-05-10T05:57:19.435Z",
+    "seedTxCount": 30,
+    "maxHops": 4,
+    "description": "Precomputed graph trace to reduce RPC load for high-volume cluster addresses."
+  },
+  "nodes": [
+    {
+      "id": "0xd8da6bf26964af9d7eed9e03e53415d37aa96045",
+      "label": "vitalik.eth",
+      "type": "root",
+      "hop": 0,
+      "risk": 0,
+      "tags": [
+        "known-public-wallet"
+      ]
+    },
+    {
+      "id": "0x8e6754da6492d8e01d7e3523e0f8e3493b0f2cdd",
+      "label": "0x8e67...2cdd",
+      "type": "address",
+      "hop": 1,
+      "risk": 5,
+      "tags": []
+    },
+    {
+      "id": "0xa3b0ff3633faac722d90c9c8e1634ca3e443fa3e",
+      "label": "Uniswap V3: Router",
+      "type": "dex",
+      "hop": 1,
+      "risk": 15,
+      "tags": []
+    },
+    {
+      "id": "0x17791386742fdc2d216e75a497c796bc6869226e",
+      "label": "DeFi Token",
+      "type": "contract",
+      "hop": 1,
+      "risk": 35,
+      "tags": []
+    },
+    {
+      "id": "0x2f1ca614750a7a944694527d8808920f9c1279a6",
+      "label": "Dust Bot",
+      "type": "suspicious",
+      "hop": 1,
+      "risk": 85,
+      "tags": [
+        "dust"
+      ]
+    },
+    {
+      "id": "0xf8e85588b3b14af6eda7455dc8793b13d091b890",
+      "label": "0xf8e8...b890",
+      "type": "address",
+      "hop": 1,
+      "risk": 5,
+      "tags": []
+    },
+    {
+      "id": "0x32b46fc30d2b5dd2e69d6d68f87990e82efde920",
+      "label": "Uniswap V3: Router",
+      "type": "dex",
+      "hop": 1,
+      "risk": 15,
+      "tags": []
+    },
+    {
+      "id": "0x534217e60b58ba7c6f51d778a860cd7a84d066cd",
+      "label": "SushiSwap Router",
+      "type": "dex",
+      "hop": 1,
+      "risk": 15,
+      "tags": []
+    },
+    {
+      "id": "0xfa28192083973d2638131d4421cd142c506ade25",
+      "label": "Dust Bot",
+      "type": "suspicious",
+      "hop": 1,
+      "risk": 85,
+      "tags": [
+        "dust"
+      ]
+    },
+    {
+      "id": "0xb7fd52d66e4cd8d51c21d3a2e17a6df0cbfa4387",
+      "label": "SushiSwap Router",
+      "type": "dex",
+      "hop": 1,
+      "risk": 15,
+      "tags": []
+    },
+    {
+      "id": "0xf47e3ad96ae8bf2f0d1a2bb03fbfef04f3d0ba85",
+      "label": "0xf47e...ba85",
+      "type": "address",
+      "hop": 1,
+      "risk": 5,
+      "tags": []
+    },
+    {
+      "id": "0x2ac8f9ffafe3ea46ae938f0a604b63dd397eb6e1",
+      "label": "Impersonator",
+      "type": "suspicious",
+      "hop": 1,
+      "risk": 85,
+      "tags": [
+        "dust"
+      ]
+    },
+    {
+      "id": "0x13fe46cee32f9480169b208769b9493c4394ddce",
+      "label": "0x13fe...ddce",
+      "type": "address",
+      "hop": 1,
+      "risk": 5,
+      "tags": []
+    },
+    {
+      "id": "0x79389725ac443855e8261f2a0f15fc792a78368a",
+      "label": "0x7938...368a",
+      "type": "address",
+      "hop": 1,
+      "risk": 5,
+      "tags": []
+    },
+    {
+      "id": "0x400a52b49fcc811b5b22f9dbb3d4f4fd2f6448e0",
+      "label": "DeFi Token",
+      "type": "contract",
+      "hop": 1,
+      "risk": 35,
+      "tags": []
+    },
+    {
+      "id": "0xd0e0b03fec4a2de0ef87fd93627922f0c43874cf",
+      "label": "0x Exchange",
+      "type": "dex",
+      "hop": 1,
+      "risk": 15,
+      "tags": []
+    },
+    {
+      "id": "0xa058bcd8d2b39c463c0428aa2dffc9197da30b04",
+      "label": "Dust Bot",
+      "type": "suspicious",
+      "hop": 1,
+      "risk": 85,
+      "tags": [
+        "dust"
+      ]
+    },
+    {
+      "id": "0x5893063f87e4e27179b9d68e0e3664d9c085393f",
+      "label": "0x5893...393f",
+      "type": "address",
+      "hop": 1,
+      "risk": 5,
+      "tags": []
+    },
+    {
+      "id": "0x5d4f46703aa14c011425f5a4499d865f4b1e4938",
+      "label": "Phishing Contract",
+      "type": "suspicious",
+      "hop": 1,
+      "risk": 85,
+      "tags": [
+        "dust"
+      ]
+    },
+    {
+      "id": "0x454b90898139604e68176404462263bbc1cccb69",
+      "label": "0x Exchange",
+      "type": "dex",
+      "hop": 1,
+      "risk": 15,
+      "tags": []
+    },
+    {
+      "id": "0x8937304653c60627936a1b92ec1635a0fb7cdd6b",
+      "label": "OKX 2",
+      "type": "exchange",
+      "hop": 1,
+      "risk": 10,
+      "tags": []
+    },
+    {
+      "id": "0xf07b93ab9d5f09e98bc28df840241abb39740223",
+      "label": "Coinbase 3",
+      "type": "exchange",
+      "hop": 1,
+      "risk": 10,
+      "tags": []
+    },
+    {
+      "id": "0x01d7482b3d6d501c9b58ba0b9cfc4738cf87152a",
+      "label": "DeFi Token",
+      "type": "contract",
+      "hop": 1,
+      "risk": 35,
+      "tags": []
+    },
+    {
+      "id": "0x8c33fa0e32cdf1315945d449169c601b3dea5197",
+      "label": "Uniswap V3: Router",
+      "type": "dex",
+      "hop": 1,
+      "risk": 15,
+      "tags": []
+    },
+    {
+      "id": "0x9d28f25afcf67503e49c4f071bda1cfb732bb398",
+      "label": "SushiSwap Router",
+      "type": "dex",
+      "hop": 1,
+      "risk": 15,
+      "tags": []
+    },
+    {
+      "id": "0xae2a87520ead8c5872136ae6bc99ff4472a6987a",
+      "label": "DeFi Token",
+      "type": "contract",
+      "hop": 1,
+      "risk": 35,
+      "tags": []
+    },
+    {
+      "id": "0x6a780fdf97cd1f4657294c27a9c89eb50740bda9",
+      "label": "0x6a78...bda9",
+      "type": "address",
+      "hop": 1,
+      "risk": 5,
+      "tags": []
+    },
+    {
+      "id": "0x38ce345224b97b8572dc01bf9900b27fa1d690b9",
+      "label": "Kraken 4",
+      "type": "exchange",
+      "hop": 1,
+      "risk": 10,
+      "tags": []
+    },
+    {
+      "id": "0x50b3222617aa3208f3faa5a41a90a735696ec71b",
+      "label": "0x50b3...c71b",
+      "type": "address",
+      "hop": 1,
+      "risk": 5,
+      "tags": []
+    },
+    {
+      "id": "0x248189e12699d1712479f25b28c47d7307b62ade",
+      "label": "Phishing Contract",
+      "type": "suspicious",
+      "hop": 1,
+      "risk": 85,
+      "tags": [
+        "dust"
+      ]
+    },
+    {
+      "id": "0xc93d607365bfd519d4f17ecfecb08745130cd36e",
+      "label": "SushiSwap Router",
+      "type": "dex",
+      "hop": 1,
+      "risk": 15,
+      "tags": []
+    },
+    {
+      "id": "0x02a771f8fcb8faa0a56d914fe6366d009bf5f96c",
+      "label": "0x02a7...f96c",
+      "type": "address",
+      "hop": 2,
+      "risk": 5,
+      "tags": []
+    },
+    {
+      "id": "0x1c30b3c516b51f290cdd148418d99bd9a96e7001",
+      "label": "0x1c30...7001",
+      "type": "address",
+      "hop": 2,
+      "risk": 5,
+      "tags": []
+    },
+    {
+      "id": "0x36b134bafb2a439f2097539a7f3250218a9cca16",
+      "label": "0x36b1...ca16",
+      "type": "address",
+      "hop": 2,
+      "risk": 5,
+      "tags": []
+    },
+    {
+      "id": "0x41a30a6c232e6798f619d14d5ef56eeeefe4a453",
+      "label": "Liquidity Pool",
+      "type": "dex",
+      "hop": 2,
+      "risk": 5,
+      "tags": []
+    },
+    {
+      "id": "0xc962ff3f55912858d59b9b64129c78ca5e416075",
+      "label": "0xc962...6075",
+      "type": "address",
+      "hop": 2,
+      "risk": 5,
+      "tags": []
+    },
+    {
+      "id": "0x2bc5fa7e5acf44f04dea2152b2cf156ebabbe055",
+      "label": "Unknown CEX",
+      "type": "exchange",
+      "hop": 2,
+      "risk": 65,
+      "tags": []
+    },
+    {
+      "id": "0x5d77c191975845e3cffe10d5a613f525462211f2",
+      "label": "0x5d77...11f2",
+      "type": "address",
+      "hop": 2,
+      "risk": 5,
+      "tags": []
+    },
+    {
+      "id": "0x1b6f107225eb831ea8529ec7151f85288592fe66",
+      "label": "0x1b6f...fe66",
+      "type": "address",
+      "hop": 2,
+      "risk": 5,
+      "tags": []
+    },
+    {
+      "id": "0xed488882b2936e240a9752b6e2e4440d9830e945",
+      "label": "0xed48...e945",
+      "type": "address",
+      "hop": 2,
+      "risk": 5,
+      "tags": []
+    },
+    {
+      "id": "0x89fb9d4efbcd00909887d4a85729b67bb70b59e5",
+      "label": "0x89fb...59e5",
+      "type": "address",
+      "hop": 2,
+      "risk": 5,
+      "tags": []
+    },
+    {
+      "id": "0x94d3e0bffac1abde54b4619101be9bcdaf2b32e0",
+      "label": "0x94d3...32e0",
+      "type": "address",
+      "hop": 2,
+      "risk": 5,
+      "tags": []
+    },
+    {
+      "id": "0x41bf46be09b60fd341050906d2b711d39848269d",
+      "label": "0x41bf...269d",
+      "type": "address",
+      "hop": 2,
+      "risk": 5,
+      "tags": []
+    },
+    {
+      "id": "0x4ed36d224412609beffc135d76e209f515f57c0f",
+      "label": "0x4ed3...7c0f",
+      "type": "address",
+      "hop": 2,
+      "risk": 5,
+      "tags": []
+    },
+    {
+      "id": "0x429d748e3625bc5dda47ef82b4b3fea02a5bc587",
+      "label": "0x429d...c587",
+      "type": "address",
+      "hop": 2,
+      "risk": 5,
+      "tags": []
+    },
+    {
+      "id": "0xe07ac14c4bcb1f2601c3c7006006c542eb4f2a2c",
+      "label": "0xe07a...2a2c",
+      "type": "address",
+      "hop": 2,
+      "risk": 5,
+      "tags": []
+    },
+    {
+      "id": "0x80c2c392b2eb7d3d02cae630480372450d7426a2",
+      "label": "Liquidity Pool",
+      "type": "dex",
+      "hop": 3,
+      "risk": 5,
+      "tags": []
+    },
+    {
+      "id": "0x93023add4c9d265134efa6cffde52d6d335d6c64",
+      "label": "Liquidity Pool",
+      "type": "dex",
+      "hop": 3,
+      "risk": 5,
+      "tags": []
+    },
+    {
+      "id": "0x70f0a5bc5952868402ebfc82c24d3085acc76f2a",
+      "label": "0x70f0...6f2a",
+      "type": "address",
+      "hop": 3,
+      "risk": 5,
+      "tags": []
+    },
+    {
+      "id": "0xe20dafdeebfe2a98979b25640ef558a3ebdd3fce",
+      "label": "0xe20d...3fce",
+      "type": "address",
+      "hop": 3,
+      "risk": 5,
+      "tags": []
+    },
+    {
+      "id": "0x5a6a1b478da3e99e9ed41bc7e69d94b59846e864",
+      "label": "0x5a6a...e864",
+      "type": "address",
+      "hop": 3,
+      "risk": 5,
+      "tags": []
+    },
+    {
+      "id": "0xabb396941105a2df45a5c5525d194806c0ee6269",
+      "label": "0xabb3...6269",
+      "type": "address",
+      "hop": 3,
+      "risk": 5,
+      "tags": []
+    },
+    {
+      "id": "0x67cf5dd11fd5102fe40068a54e8b8fbc0dcd6512",
+      "label": "0x67cf...6512",
+      "type": "address",
+      "hop": 3,
+      "risk": 5,
+      "tags": []
+    },
+    {
+      "id": "0x303efa4652b6ca0c8cceda5b59343c5b85195ec9",
+      "label": "Unknown CEX",
+      "type": "exchange",
+      "hop": 3,
+      "risk": 65,
+      "tags": []
+    },
+    {
+      "id": "0xee713a08dcf2aff08912a89621615f13e75c8323",
+      "label": "Liquidity Pool",
+      "type": "dex",
+      "hop": 3,
+      "risk": 5,
+      "tags": []
+    },
+    {
+      "id": "0x6814258375ff27991b5f6d94999288256e84bd9c",
+      "label": "Unknown CEX",
+      "type": "exchange",
+      "hop": 3,
+      "risk": 5,
+      "tags": []
+    },
+    {
+      "id": "0x7b549fd0194925b6fb488d7c852a276bd46e06f8",
+      "label": "0x7b54...06f8",
+      "type": "address",
+      "hop": 3,
+      "risk": 5,
+      "tags": []
+    },
+    {
+      "id": "0x7db4021db21c57661be294dcbe63a141752d4c44",
+      "label": "Liquidity Pool",
+      "type": "dex",
+      "hop": 3,
+      "risk": 5,
+      "tags": []
+    },
+    {
+      "id": "0x4b36607dc360a7cdf403864b035b7acfa97c1d00",
+      "label": "Liquidity Pool",
+      "type": "dex",
+      "hop": 3,
+      "risk": 5,
+      "tags": []
+    },
+    {
+      "id": "0xe1b5bf6786f5efa186d281b391c0b1f0dcf87ab2",
+      "label": "0xe1b5...7ab2",
+      "type": "address",
+      "hop": 3,
+      "risk": 5,
+      "tags": []
+    },
+    {
+      "id": "0x6ad03ea8bab71e1c2fd98a08ba9d3f2e7bb67156",
+      "label": "Liquidity Pool",
+      "type": "dex",
+      "hop": 3,
+      "risk": 5,
+      "tags": []
+    },
+    {
+      "id": "0x00098caec988ff2a4974a8d293b94ce4ae0b7554",
+      "label": "Unknown CEX",
+      "type": "exchange",
+      "hop": 4,
+      "risk": 5,
+      "tags": []
+    },
+    {
+      "id": "0xdf60b1a32c140824a043613e422c44449374ef3b",
+      "label": "0xdf60...ef3b",
+      "type": "address",
+      "hop": 4,
+      "risk": 5,
+      "tags": []
+    },
+    {
+      "id": "0xbbc88dca869f402a1b48c96bad7ead78cd88e845",
+      "label": "0xbbc8...e845",
+      "type": "address",
+      "hop": 4,
+      "risk": 5,
+      "tags": []
+    },
+    {
+      "id": "0x6658687df1b7249d1bcc68a35683d612a95706b7",
+      "label": "Unknown CEX",
+      "type": "exchange",
+      "hop": 4,
+      "risk": 65,
+      "tags": []
+    },
+    {
+      "id": "0xd97659aab08cad6fbff612672657ce5baee58628",
+      "label": "0xd976...8628",
+      "type": "address",
+      "hop": 4,
+      "risk": 5,
+      "tags": []
+    },
+    {
+      "id": "0x6cc0211f5b143c73669627a31b6fce9da9e38d11",
+      "label": "0x6cc0...8d11",
+      "type": "address",
+      "hop": 4,
+      "risk": 5,
+      "tags": []
+    },
+    {
+      "id": "0xf01265b5e3a0edf004a90587db0ef0b3f7806d5e",
+      "label": "0xf012...6d5e",
+      "type": "address",
+      "hop": 4,
+      "risk": 5,
+      "tags": []
+    },
+    {
+      "id": "0x6cf5b4ed197b8627d1a4caee71a45a9b3fafdb7e",
+      "label": "0x6cf5...db7e",
+      "type": "address",
+      "hop": 4,
+      "risk": 5,
+      "tags": []
+    },
+    {
+      "id": "0x8b12c064095aa51fbbbde15922a5a2b30a81663f",
+      "label": "0x8b12...663f",
+      "type": "address",
+      "hop": 4,
+      "risk": 5,
+      "tags": []
+    },
+    {
+      "id": "0x540216fa0f7b139adc6845802bdb8116370e93e4",
+      "label": "0x5402...93e4",
+      "type": "address",
+      "hop": 4,
+      "risk": 5,
+      "tags": []
+    },
+    {
+      "id": "0x3b514e1bc19da85a8c52460977ee57d5ad4d3270",
+      "label": "0x3b51...3270",
+      "type": "address",
+      "hop": 4,
+      "risk": 5,
+      "tags": []
+    },
+    {
+      "id": "0x735839df47df404d91b9802338486d3b88c54f2c",
+      "label": "Liquidity Pool",
+      "type": "dex",
+      "hop": 4,
+      "risk": 5,
+      "tags": []
+    },
+    {
+      "id": "0xe2bc6aaf8b82567033b56f5a3926977fc76cbb50",
+      "label": "0xe2bc...bb50",
+      "type": "address",
+      "hop": 4,
+      "risk": 5,
+      "tags": []
+    },
+    {
+      "id": "0x75ede1f978e859ad5ebc40b7f24fa4292f0f1cef",
+      "label": "Unknown CEX",
+      "type": "exchange",
+      "hop": 4,
+      "risk": 5,
+      "tags": []
+    },
+    {
+      "id": "0xa55a2f37bb029e4082a5a65d71fc5bdc0751b92b",
+      "label": "Unknown CEX",
+      "type": "exchange",
+      "hop": 4,
+      "risk": 65,
+      "tags": []
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge-0",
+      "txHash": "0x4bdb73b495744427f03606c682c6ee3d704c81b1",
+      "from": "0xd8da6bf26964af9d7eed9e03e53415d37aa96045",
+      "to": "0x8e6754da6492d8e01d7e3523e0f8e3493b0f2cdd",
+      "valueEth": 3.690919104001768,
+      "timestamp": 1777940629.9234624,
+      "method": "Transfer",
+      "directionFromRoot": "out",
+      "hop": 1,
+      "risk": 5,
+      "tags": []
+    },
+    {
+      "id": "edge-1",
+      "txHash": "0x3f3bf3523e23a498afb162abbd3f6c8e0678f6c1",
+      "from": "0xd8da6bf26964af9d7eed9e03e53415d37aa96045",
+      "to": "0xa3b0ff3633faac722d90c9c8e1634ca3e443fa3e",
+      "valueEth": 1.7415847435683107,
+      "timestamp": 1777668953.3701658,
+      "method": "Swap",
+      "directionFromRoot": "out",
+      "hop": 1,
+      "risk": 15,
+      "tags": [
+        "defi-swap"
+      ]
+    },
+    {
+      "id": "edge-2",
+      "txHash": "0x0b193e2e5cad7b6f26b3e3d27b7d488fbfb5f57d",
+      "from": "0xd8da6bf26964af9d7eed9e03e53415d37aa96045",
+      "to": "0x17791386742fdc2d216e75a497c796bc6869226e",
+      "valueEth": 0.30717495014060403,
+      "timestamp": 1776255673.3206728,
+      "method": "Approve",
+      "directionFromRoot": "out",
+      "hop": 1,
+      "risk": 35,
+      "tags": [
+        "approval"
+      ]
+    },
+    {
+      "id": "edge-3",
+      "txHash": "0x7caad4c898ad381e5a96b932944ebdd8d713fb90",
+      "from": "0x2f1ca614750a7a944694527d8808920f9c1279a6",
+      "to": "0xd8da6bf26964af9d7eed9e03e53415d37aa96045",
+      "valueEth": 0.000009107679590976881,
+      "timestamp": 1777135933.322742,
+      "method": "Transfer",
+      "directionFromRoot": "in",
+      "hop": 1,
+      "risk": 85,
+      "tags": [
+        "dust"
+      ]
+    },
+    {
+      "id": "edge-4",
+      "txHash": "0x2621f8f39a728c55b33386722fb76489318f24a0",
+      "from": "0xd8da6bf26964af9d7eed9e03e53415d37aa96045",
+      "to": "0xf8e85588b3b14af6eda7455dc8793b13d091b890",
+      "valueEth": 12.61162604773313,
+      "timestamp": 1775991767.281927,
+      "method": "Transfer",
+      "directionFromRoot": "out",
+      "hop": 1,
+      "risk": 5,
+      "tags": []
+    },
+    {
+      "id": "edge-5",
+      "txHash": "0x12a0083fdd99e1982e13fd77d51515b10b04e2c1",
+      "from": "0xd8da6bf26964af9d7eed9e03e53415d37aa96045",
+      "to": "0x32b46fc30d2b5dd2e69d6d68f87990e82efde920",
+      "valueEth": 11.225728527007137,
+      "timestamp": 1777144415.2808816,
+      "method": "Swap",
+      "directionFromRoot": "out",
+      "hop": 1,
+      "risk": 15,
+      "tags": [
+        "defi-swap"
+      ]
+    },
+    {
+      "id": "edge-6",
+      "txHash": "0x65c585bdc7b98ef4a0956fc2fc509cbd0c63404d",
+      "from": "0xd8da6bf26964af9d7eed9e03e53415d37aa96045",
+      "to": "0x534217e60b58ba7c6f51d778a860cd7a84d066cd",
+      "valueEth": 4.03286014894969,
+      "timestamp": 1778104617.2015758,
+      "method": "Swap",
+      "directionFromRoot": "out",
+      "hop": 1,
+      "risk": 15,
+      "tags": [
+        "defi-swap"
+      ]
+    },
+    {
+      "id": "edge-7",
+      "txHash": "0xb9519d8804a61dd1a8d04ac640a6d05ee75ae597",
+      "from": "0xfa28192083973d2638131d4421cd142c506ade25",
+      "to": "0xd8da6bf26964af9d7eed9e03e53415d37aa96045",
+      "valueEth": 0.00003911475542716283,
+      "timestamp": 1777238918.306797,
+      "method": "Transfer",
+      "directionFromRoot": "in",
+      "hop": 1,
+      "risk": 85,
+      "tags": [
+        "dust"
+      ]
+    },
+    {
+      "id": "edge-8",
+      "txHash": "0x2981743f7bbe23d424b4ec21bc2e658ebdb10739",
+      "from": "0xd8da6bf26964af9d7eed9e03e53415d37aa96045",
+      "to": "0xb7fd52d66e4cd8d51c21d3a2e17a6df0cbfa4387",
+      "valueEth": 10.566106655676236,
+      "timestamp": 1776242071.8848584,
+      "method": "Swap",
+      "directionFromRoot": "out",
+      "hop": 1,
+      "risk": 15,
+      "tags": [
+        "defi-swap"
+      ]
+    },
+    {
+      "id": "edge-9",
+      "txHash": "0xd9c936c1864df1f92ba1c5ab41b102325eef2ead",
+      "from": "0xd8da6bf26964af9d7eed9e03e53415d37aa96045",
+      "to": "0xf47e3ad96ae8bf2f0d1a2bb03fbfef04f3d0ba85",
+      "valueEth": 1.0912002032311148,
+      "timestamp": 1776976466.7706337,
+      "method": "Transfer",
+      "directionFromRoot": "out",
+      "hop": 1,
+      "risk": 5,
+      "tags": []
+    },
+    {
+      "id": "edge-10",
+      "txHash": "0x88a59146cecd95e8fac55711eeac55a8b2e555f1",
+      "from": "0x2ac8f9ffafe3ea46ae938f0a604b63dd397eb6e1",
+      "to": "0xd8da6bf26964af9d7eed9e03e53415d37aa96045",
+      "valueEth": 0.00002015269777640778,
+      "timestamp": 1778250197.8628411,
+      "method": "Transfer",
+      "directionFromRoot": "in",
+      "hop": 1,
+      "risk": 85,
+      "tags": [
+        "dust"
+      ]
+    },
+    {
+      "id": "edge-11",
+      "txHash": "0x462ee84432e0a8875f71cb18fb81afba14853978",
+      "from": "0xd8da6bf26964af9d7eed9e03e53415d37aa96045",
+      "to": "0x13fe46cee32f9480169b208769b9493c4394ddce",
+      "valueEth": 4.196665948571262,
+      "timestamp": 1775802575.4956737,
+      "method": "Transfer",
+      "directionFromRoot": "out",
+      "hop": 1,
+      "risk": 5,
+      "tags": []
+    },
+    {
+      "id": "edge-12",
+      "txHash": "0x2b31c64c5fe22c4a1f5dec64540ad24d6ed6c6a8",
+      "from": "0xd8da6bf26964af9d7eed9e03e53415d37aa96045",
+      "to": "0x79389725ac443855e8261f2a0f15fc792a78368a",
+      "valueEth": 6.857550791900676,
+      "timestamp": 1776399831.8400505,
+      "method": "Transfer",
+      "directionFromRoot": "out",
+      "hop": 1,
+      "risk": 5,
+      "tags": []
+    },
+    {
+      "id": "edge-13",
+      "txHash": "0x2c9334b12ea0a7d34c60fda3bc7d8f1865ca54eb",
+      "from": "0xd8da6bf26964af9d7eed9e03e53415d37aa96045",
+      "to": "0x400a52b49fcc811b5b22f9dbb3d4f4fd2f6448e0",
+      "valueEth": 4.886528863858003,
+      "timestamp": 1776092924.3236575,
+      "method": "Approve",
+      "directionFromRoot": "out",
+      "hop": 1,
+      "risk": 35,
+      "tags": [
+        "approval"
+      ]
+    },
+    {
+      "id": "edge-14",
+      "txHash": "0x855540b25faba68100904594c074e903853bdaeb",
+      "from": "0xd8da6bf26964af9d7eed9e03e53415d37aa96045",
+      "to": "0xd0e0b03fec4a2de0ef87fd93627922f0c43874cf",
+      "valueEth": 13.598016045472821,
+      "timestamp": 1778340025.0425444,
+      "method": "Swap",
+      "directionFromRoot": "out",
+      "hop": 1,
+      "risk": 15,
+      "tags": [
+        "defi-swap"
+      ]
+    },
+    {
+      "id": "edge-15",
+      "txHash": "0x350fe8191e6b75cb141bd068ababd775aedcc498",
+      "from": "0xa058bcd8d2b39c463c0428aa2dffc9197da30b04",
+      "to": "0xd8da6bf26964af9d7eed9e03e53415d37aa96045",
+      "valueEth": 0.00007065668880471965,
+      "timestamp": 1778296408.598646,
+      "method": "Transfer",
+      "directionFromRoot": "in",
+      "hop": 1,
+      "risk": 85,
+      "tags": [
+        "dust"
+      ]
+    },
+    {
+      "id": "edge-16",
+      "txHash": "0x1bcac82284861e544f5636f125d2123633f9587c",
+      "from": "0xd8da6bf26964af9d7eed9e03e53415d37aa96045",
+      "to": "0x5893063f87e4e27179b9d68e0e3664d9c085393f",
+      "valueEth": 5.084171692032922,
+      "timestamp": 1776758360.6064122,
+      "method": "Transfer",
+      "directionFromRoot": "out",
+      "hop": 1,
+      "risk": 5,
+      "tags": []
+    },
+    {
+      "id": "edge-17",
+      "txHash": "0x3592ec94a99ac66525d2d94723199b61ca811ca5",
+      "from": "0x5d4f46703aa14c011425f5a4499d865f4b1e4938",
+      "to": "0xd8da6bf26964af9d7eed9e03e53415d37aa96045",
+      "valueEth": 0.000020412275843292883,
+      "timestamp": 1776996870.7553113,
+      "method": "Transfer",
+      "directionFromRoot": "in",
+      "hop": 1,
+      "risk": 85,
+      "tags": [
+        "dust"
+      ]
+    },
+    {
+      "id": "edge-18",
+      "txHash": "0x25a8a62619453e007c7e68fb8d8eb00632835b87",
+      "from": "0xd8da6bf26964af9d7eed9e03e53415d37aa96045",
+      "to": "0x454b90898139604e68176404462263bbc1cccb69",
+      "valueEth": 9.462905600649922,
+      "timestamp": 1777292400.1292338,
+      "method": "Swap",
+      "directionFromRoot": "out",
+      "hop": 1,
+      "risk": 15,
+      "tags": [
+        "defi-swap"
+      ]
+    },
+    {
+      "id": "edge-19",
+      "txHash": "0xdfeeb0cd1744cedb30b5c089cbdf71acefb521de",
+      "from": "0xd8da6bf26964af9d7eed9e03e53415d37aa96045",
+      "to": "0x8937304653c60627936a1b92ec1635a0fb7cdd6b",
+      "valueEth": 7.719159180617318,
+      "timestamp": 1776141185.3519895,
+      "method": "Transfer",
+      "directionFromRoot": "out",
+      "hop": 1,
+      "risk": 10,
+      "tags": []
+    },
+    {
+      "id": "edge-20",
+      "txHash": "0x338cda4bc2e91ca7d67e0ded5eba7e3be7063751",
+      "from": "0xd8da6bf26964af9d7eed9e03e53415d37aa96045",
+      "to": "0xf07b93ab9d5f09e98bc28df840241abb39740223",
+      "valueEth": 1.373064581359782,
+      "timestamp": 1778334574.2495303,
+      "method": "Transfer",
+      "directionFromRoot": "out",
+      "hop": 1,
+      "risk": 10,
+      "tags": []
+    },
+    {
+      "id": "edge-21",
+      "txHash": "0x1aac90b227640aafa097a7ac256da714a52439be",
+      "from": "0xd8da6bf26964af9d7eed9e03e53415d37aa96045",
+      "to": "0x01d7482b3d6d501c9b58ba0b9cfc4738cf87152a",
+      "valueEth": 2.849395404942734,
+      "timestamp": 1777878621.140048,
+      "method": "Approve",
+      "directionFromRoot": "out",
+      "hop": 1,
+      "risk": 35,
+      "tags": [
+        "approval"
+      ]
+    },
+    {
+      "id": "edge-22",
+      "txHash": "0xcf8e7a953aba1080792831b38b112d92f6742917",
+      "from": "0xd8da6bf26964af9d7eed9e03e53415d37aa96045",
+      "to": "0x8c33fa0e32cdf1315945d449169c601b3dea5197",
+      "valueEth": 3.4741846483277286,
+      "timestamp": 1778124370.3864908,
+      "method": "Swap",
+      "directionFromRoot": "out",
+      "hop": 1,
+      "risk": 15,
+      "tags": [
+        "defi-swap"
+      ]
+    },
+    {
+      "id": "edge-23",
+      "txHash": "0x23a6a2d5d90f6002d9fabd3a540562a38fc331e5",
+      "from": "0xd8da6bf26964af9d7eed9e03e53415d37aa96045",
+      "to": "0x9d28f25afcf67503e49c4f071bda1cfb732bb398",
+      "valueEth": 9.94128240859914,
+      "timestamp": 1776155907.366371,
+      "method": "Swap",
+      "directionFromRoot": "out",
+      "hop": 1,
+      "risk": 15,
+      "tags": [
+        "defi-swap"
+      ]
+    },
+    {
+      "id": "edge-24",
+      "txHash": "0xa854594761f80e180f771b55b861446ac6534216",
+      "from": "0xd8da6bf26964af9d7eed9e03e53415d37aa96045",
+      "to": "0xae2a87520ead8c5872136ae6bc99ff4472a6987a",
+      "valueEth": 1.479167486289323,
+      "timestamp": 1777367750.4378293,
+      "method": "Approve",
+      "directionFromRoot": "out",
+      "hop": 1,
+      "risk": 35,
+      "tags": [
+        "approval"
+      ]
+    },
+    {
+      "id": "edge-25",
+      "txHash": "0x54a7a26ced3c94a2f287ab6bc92a322c25f04350",
+      "from": "0xd8da6bf26964af9d7eed9e03e53415d37aa96045",
+      "to": "0x6a780fdf97cd1f4657294c27a9c89eb50740bda9",
+      "valueEth": 2.670408130513599,
+      "timestamp": 1777712367.411859,
+      "method": "Transfer",
+      "directionFromRoot": "out",
+      "hop": 1,
+      "risk": 5,
+      "tags": []
+    },
+    {
+      "id": "edge-26",
+      "txHash": "0x8047809de11cdbc1e0ef77f7c28dde179a0d417f",
+      "from": "0xd8da6bf26964af9d7eed9e03e53415d37aa96045",
+      "to": "0x38ce345224b97b8572dc01bf9900b27fa1d690b9",
+      "valueEth": 11.724225775657178,
+      "timestamp": 1777035935.261093,
+      "method": "Transfer",
+      "directionFromRoot": "out",
+      "hop": 1,
+      "risk": 10,
+      "tags": []
+    },
+    {
+      "id": "edge-27",
+      "txHash": "0xca33d6064a76a47357b737c46201fa74ff77fd32",
+      "from": "0xd8da6bf26964af9d7eed9e03e53415d37aa96045",
+      "to": "0x50b3222617aa3208f3faa5a41a90a735696ec71b",
+      "valueEth": 4.98963699787642,
+      "timestamp": 1777403169.387137,
+      "method": "Transfer",
+      "directionFromRoot": "out",
+      "hop": 1,
+      "risk": 5,
+      "tags": []
+    },
+    {
+      "id": "edge-28",
+      "txHash": "0x7bcd82ac5a4f7736817ac7043b4800ea914b9a4f",
+      "from": "0x248189e12699d1712479f25b28c47d7307b62ade",
+      "to": "0xd8da6bf26964af9d7eed9e03e53415d37aa96045",
+      "valueEth": 0.00006270288318504315,
+      "timestamp": 1777125218.5240061,
+      "method": "Transfer",
+      "directionFromRoot": "in",
+      "hop": 1,
+      "risk": 85,
+      "tags": [
+        "dust"
+      ]
+    },
+    {
+      "id": "edge-29",
+      "txHash": "0xe6c23d77d90f8d5eb4694b41d47564ebec868b3a",
+      "from": "0xd8da6bf26964af9d7eed9e03e53415d37aa96045",
+      "to": "0xc93d607365bfd519d4f17ecfecb08745130cd36e",
+      "valueEth": 0.952045631216587,
+      "timestamp": 1777204597.0603678,
+      "method": "Swap",
+      "directionFromRoot": "out",
+      "hop": 1,
+      "risk": 15,
+      "tags": [
+        "defi-swap"
+      ]
+    },
+    {
+      "id": "edge-30",
+      "txHash": "0x250d3f4092e55728c4f1f08707f0297fc0145bf7",
+      "from": "0x13fe46cee32f9480169b208769b9493c4394ddce",
+      "to": "0x02a771f8fcb8faa0a56d914fe6366d009bf5f96c",
+      "valueEth": 4.570775266166784,
+      "timestamp": 1775423138.9635496,
+      "method": "Transfer",
+      "directionFromRoot": "side",
+      "hop": 2,
+      "risk": 5,
+      "tags": []
+    },
+    {
+      "id": "edge-31",
+      "txHash": "0x19dd4213fea252731c2cc4095d6d19afa59c89cc",
+      "from": "0x13fe46cee32f9480169b208769b9493c4394ddce",
+      "to": "0x1c30b3c516b51f290cdd148418d99bd9a96e7001",
+      "valueEth": 4.960072604411207,
+      "timestamp": 1778125750.0030835,
+      "method": "Transfer",
+      "directionFromRoot": "side",
+      "hop": 2,
+      "risk": 5,
+      "tags": []
+    },
+    {
+      "id": "edge-32",
+      "txHash": "0xc3a952f6042c026876e70245d6aa6b9b340c8dda",
+      "from": "0x13fe46cee32f9480169b208769b9493c4394ddce",
+      "to": "0x36b134bafb2a439f2097539a7f3250218a9cca16",
+      "valueEth": 2.4794101769408963,
+      "timestamp": 1774659128.2509484,
+      "method": "Transfer",
+      "directionFromRoot": "side",
+      "hop": 2,
+      "risk": 5,
+      "tags": []
+    },
+    {
+      "id": "edge-33",
+      "txHash": "0xc695a624a82e2c310a99dba0d30f7c74a3a3aa2e",
+      "from": "0x8c33fa0e32cdf1315945d449169c601b3dea5197",
+      "to": "0x41a30a6c232e6798f619d14d5ef56eeeefe4a453",
+      "valueEth": 0.6653958169986335,
+      "timestamp": 1777214700.9930048,
+      "method": "Swap",
+      "directionFromRoot": "side",
+      "hop": 2,
+      "risk": 5,
+      "tags": [
+        "defi-swap"
+      ]
+    },
+    {
+      "id": "edge-34",
+      "txHash": "0x768d60fa70858bce5cae8c23ddc67519f52bc6c9",
+      "from": "0x8c33fa0e32cdf1315945d449169c601b3dea5197",
+      "to": "0xc962ff3f55912858d59b9b64129c78ca5e416075",
+      "valueEth": 2.4552030314861764,
+      "timestamp": 1777862215.9080174,
+      "method": "Transfer",
+      "directionFromRoot": "side",
+      "hop": 2,
+      "risk": 5,
+      "tags": []
+    },
+    {
+      "id": "edge-35",
+      "txHash": "0x48f3f01538f6bff17db944cd659951c42322e4e4",
+      "from": "0x8c33fa0e32cdf1315945d449169c601b3dea5197",
+      "to": "0x2bc5fa7e5acf44f04dea2152b2cf156ebabbe055",
+      "valueEth": 3.538445294828243,
+      "timestamp": 1776859183.503179,
+      "method": "Transfer",
+      "directionFromRoot": "side",
+      "hop": 2,
+      "risk": 65,
+      "tags": []
+    },
+    {
+      "id": "edge-36",
+      "txHash": "0x41ad6138632cbc1dde38b5bf4f68c0a2e8786bb1",
+      "from": "0x38ce345224b97b8572dc01bf9900b27fa1d690b9",
+      "to": "0x5d77c191975845e3cffe10d5a613f525462211f2",
+      "valueEth": 3.5170770300357574,
+      "timestamp": 1774277011.4565556,
+      "method": "Transfer",
+      "directionFromRoot": "side",
+      "hop": 2,
+      "risk": 5,
+      "tags": []
+    },
+    {
+      "id": "edge-37",
+      "txHash": "0xc7deb453243efeae43244e3d9ae619a203b9aefd",
+      "from": "0x38ce345224b97b8572dc01bf9900b27fa1d690b9",
+      "to": "0x1b6f107225eb831ea8529ec7151f85288592fe66",
+      "valueEth": 1.707562476789738,
+      "timestamp": 1775999581.1302223,
+      "method": "Transfer",
+      "directionFromRoot": "side",
+      "hop": 2,
+      "risk": 5,
+      "tags": []
+    },
+    {
+      "id": "edge-38",
+      "txHash": "0xcbe6e99eb87cd2da4d268694f348a6c65f716cd9",
+      "from": "0x38ce345224b97b8572dc01bf9900b27fa1d690b9",
+      "to": "0xed488882b2936e240a9752b6e2e4440d9830e945",
+      "valueEth": 1.0548755515244301,
+      "timestamp": 1774776274.745092,
+      "method": "Transfer",
+      "directionFromRoot": "side",
+      "hop": 2,
+      "risk": 5,
+      "tags": []
+    },
+    {
+      "id": "edge-39",
+      "txHash": "0x63aae0806218353df5b5dd974c41d2d208a9e5bd",
+      "from": "0x32b46fc30d2b5dd2e69d6d68f87990e82efde920",
+      "to": "0x89fb9d4efbcd00909887d4a85729b67bb70b59e5",
+      "valueEth": 4.347596007076126,
+      "timestamp": 1775547764.3930414,
+      "method": "Transfer",
+      "directionFromRoot": "side",
+      "hop": 2,
+      "risk": 5,
+      "tags": []
+    },
+    {
+      "id": "edge-40",
+      "txHash": "0x4662c3367bd0109407b950fcff6a2ecd564a9f96",
+      "from": "0x32b46fc30d2b5dd2e69d6d68f87990e82efde920",
+      "to": "0x94d3e0bffac1abde54b4619101be9bcdaf2b32e0",
+      "valueEth": 1.9871691609945652,
+      "timestamp": 1775317148.0504563,
+      "method": "Transfer",
+      "directionFromRoot": "side",
+      "hop": 2,
+      "risk": 5,
+      "tags": []
+    },
+    {
+      "id": "edge-41",
+      "txHash": "0xf0a96a879ad8197ef5cb17f146fe952e64f71ed2",
+      "from": "0x32b46fc30d2b5dd2e69d6d68f87990e82efde920",
+      "to": "0x41bf46be09b60fd341050906d2b711d39848269d",
+      "valueEth": 2.669865175442412,
+      "timestamp": 1777247537.6686628,
+      "method": "Transfer",
+      "directionFromRoot": "side",
+      "hop": 2,
+      "risk": 5,
+      "tags": []
+    },
+    {
+      "id": "edge-42",
+      "txHash": "0x57ffd1f9094ba0ca68c969f6e97805ffad1ac1ef",
+      "from": "0x79389725ac443855e8261f2a0f15fc792a78368a",
+      "to": "0x4ed36d224412609beffc135d76e209f515f57c0f",
+      "valueEth": 3.428701587451628,
+      "timestamp": 1774476414.004098,
+      "method": "Transfer",
+      "directionFromRoot": "side",
+      "hop": 2,
+      "risk": 5,
+      "tags": []
+    },
+    {
+      "id": "edge-43",
+      "txHash": "0x8b51a1f5029ef0ca20650ff07ec4d62c43ecc38d",
+      "from": "0x79389725ac443855e8261f2a0f15fc792a78368a",
+      "to": "0x429d748e3625bc5dda47ef82b4b3fea02a5bc587",
+      "valueEth": 2.089797388550383,
+      "timestamp": 1776175110.0521398,
+      "method": "Transfer",
+      "directionFromRoot": "side",
+      "hop": 2,
+      "risk": 5,
+      "tags": []
+    },
+    {
+      "id": "edge-44",
+      "txHash": "0x003568416e02460795c46929be2588a116ada395",
+      "from": "0x79389725ac443855e8261f2a0f15fc792a78368a",
+      "to": "0xe07ac14c4bcb1f2601c3c7006006c542eb4f2a2c",
+      "valueEth": 1.6014263743640489,
+      "timestamp": 1776793479.4157777,
+      "method": "Transfer",
+      "directionFromRoot": "side",
+      "hop": 2,
+      "risk": 5,
+      "tags": []
+    },
+    {
+      "id": "edge-45",
+      "txHash": "0xf1ffc79ebd4316e20b83e38c291201cc5a025c3f",
+      "from": "0x89fb9d4efbcd00909887d4a85729b67bb70b59e5",
+      "to": "0x80c2c392b2eb7d3d02cae630480372450d7426a2",
+      "valueEth": 4.086032550121368,
+      "timestamp": 1774112196.8170063,
+      "method": "Swap",
+      "directionFromRoot": "side",
+      "hop": 3,
+      "risk": 5,
+      "tags": [
+        "defi-swap"
+      ]
+    },
+    {
+      "id": "edge-46",
+      "txHash": "0x729c801b8b8020994131b5a93db9125ececf0c84",
+      "from": "0x89fb9d4efbcd00909887d4a85729b67bb70b59e5",
+      "to": "0x93023add4c9d265134efa6cffde52d6d335d6c64",
+      "valueEth": 4.260667031505899,
+      "timestamp": 1776377797.8366132,
+      "method": "Swap",
+      "directionFromRoot": "side",
+      "hop": 3,
+      "risk": 5,
+      "tags": [
+        "defi-swap"
+      ]
+    },
+    {
+      "id": "edge-47",
+      "txHash": "0xcda7eb7a0c8b4463c1adbc733050d5f24d8ba858",
+      "from": "0x89fb9d4efbcd00909887d4a85729b67bb70b59e5",
+      "to": "0x70f0a5bc5952868402ebfc82c24d3085acc76f2a",
+      "valueEth": 1.5781238699246654,
+      "timestamp": 1773221566.2502532,
+      "method": "Transfer",
+      "directionFromRoot": "side",
+      "hop": 3,
+      "risk": 5,
+      "tags": []
+    },
+    {
+      "id": "edge-48",
+      "txHash": "0xe78c9e3185a9a0da490cf742d2e791a33c5a73a6",
+      "from": "0x4ed36d224412609beffc135d76e209f515f57c0f",
+      "to": "0xe20dafdeebfe2a98979b25640ef558a3ebdd3fce",
+      "valueEth": 1.2983903534609198,
+      "timestamp": 1776938999.044367,
+      "method": "Transfer",
+      "directionFromRoot": "side",
+      "hop": 3,
+      "risk": 5,
+      "tags": []
+    },
+    {
+      "id": "edge-49",
+      "txHash": "0xe8fb564fd1cb7ab5f8305bc4ac1ec543ce826c7b",
+      "from": "0x4ed36d224412609beffc135d76e209f515f57c0f",
+      "to": "0x5a6a1b478da3e99e9ed41bc7e69d94b59846e864",
+      "valueEth": 3.443370744165788,
+      "timestamp": 1775427282.1628475,
+      "method": "Transfer",
+      "directionFromRoot": "side",
+      "hop": 3,
+      "risk": 5,
+      "tags": []
+    },
+    {
+      "id": "edge-50",
+      "txHash": "0x7b7dba88833434a802999f391f58c1bcab35fc86",
+      "from": "0x4ed36d224412609beffc135d76e209f515f57c0f",
+      "to": "0xabb396941105a2df45a5c5525d194806c0ee6269",
+      "valueEth": 2.363325116968538,
+      "timestamp": 1773402986.4604843,
+      "method": "Transfer",
+      "directionFromRoot": "side",
+      "hop": 3,
+      "risk": 5,
+      "tags": []
+    },
+    {
+      "id": "edge-51",
+      "txHash": "0xe24298068f9b9a069be4e49f0ac232b2fb31fd47",
+      "from": "0xe07ac14c4bcb1f2601c3c7006006c542eb4f2a2c",
+      "to": "0x67cf5dd11fd5102fe40068a54e8b8fbc0dcd6512",
+      "valueEth": 3.6602756650843697,
+      "timestamp": 1777243067.5845168,
+      "method": "Transfer",
+      "directionFromRoot": "side",
+      "hop": 3,
+      "risk": 5,
+      "tags": []
+    },
+    {
+      "id": "edge-52",
+      "txHash": "0x5b03a47c80139f17a02ea61522b51b682ff3092a",
+      "from": "0xe07ac14c4bcb1f2601c3c7006006c542eb4f2a2c",
+      "to": "0x303efa4652b6ca0c8cceda5b59343c5b85195ec9",
+      "valueEth": 3.7938888403945814,
+      "timestamp": 1777225776.8330536,
+      "method": "Transfer",
+      "directionFromRoot": "side",
+      "hop": 3,
+      "risk": 65,
+      "tags": []
+    },
+    {
+      "id": "edge-53",
+      "txHash": "0x050ad3b4e79105fe9f014145b67ee43eac568544",
+      "from": "0xe07ac14c4bcb1f2601c3c7006006c542eb4f2a2c",
+      "to": "0xee713a08dcf2aff08912a89621615f13e75c8323",
+      "valueEth": 4.077550671760245,
+      "timestamp": 1776402028.2247767,
+      "method": "Swap",
+      "directionFromRoot": "side",
+      "hop": 3,
+      "risk": 5,
+      "tags": [
+        "defi-swap"
+      ]
+    },
+    {
+      "id": "edge-54",
+      "txHash": "0x0717aed6a45e34ec3a393c8aa80298ad4416a7ea",
+      "from": "0x41bf46be09b60fd341050906d2b711d39848269d",
+      "to": "0x6814258375ff27991b5f6d94999288256e84bd9c",
+      "valueEth": 3.9822611475577734,
+      "timestamp": 1774086193.5834646,
+      "method": "Transfer",
+      "directionFromRoot": "side",
+      "hop": 3,
+      "risk": 5,
+      "tags": []
+    },
+    {
+      "id": "edge-55",
+      "txHash": "0xf6a962657794acbbc247c974fb3bc98a0dc5f587",
+      "from": "0x41bf46be09b60fd341050906d2b711d39848269d",
+      "to": "0x7b549fd0194925b6fb488d7c852a276bd46e06f8",
+      "valueEth": 3.133584455885068,
+      "timestamp": 1773949772.8393927,
+      "method": "Transfer",
+      "directionFromRoot": "side",
+      "hop": 3,
+      "risk": 5,
+      "tags": []
+    },
+    {
+      "id": "edge-56",
+      "txHash": "0x2d9c40ef90d871033cf217197cfd9e25cb958a99",
+      "from": "0x41bf46be09b60fd341050906d2b711d39848269d",
+      "to": "0x7db4021db21c57661be294dcbe63a141752d4c44",
+      "valueEth": 4.560562319937055,
+      "timestamp": 1775619525.286058,
+      "method": "Swap",
+      "directionFromRoot": "side",
+      "hop": 3,
+      "risk": 5,
+      "tags": [
+        "defi-swap"
+      ]
+    },
+    {
+      "id": "edge-57",
+      "txHash": "0xc10f81044e139194734ffcafa469554b9d2e90fc",
+      "from": "0x41a30a6c232e6798f619d14d5ef56eeeefe4a453",
+      "to": "0x4b36607dc360a7cdf403864b035b7acfa97c1d00",
+      "valueEth": 2.4202217326649667,
+      "timestamp": 1776958599.1865308,
+      "method": "Swap",
+      "directionFromRoot": "side",
+      "hop": 3,
+      "risk": 5,
+      "tags": [
+        "defi-swap"
+      ]
+    },
+    {
+      "id": "edge-58",
+      "txHash": "0x97711d599c52cadc12914aaac11d03f45bfdebd3",
+      "from": "0x41a30a6c232e6798f619d14d5ef56eeeefe4a453",
+      "to": "0xe1b5bf6786f5efa186d281b391c0b1f0dcf87ab2",
+      "valueEth": 1.635670496182278,
+      "timestamp": 1776504295.9109356,
+      "method": "Transfer",
+      "directionFromRoot": "side",
+      "hop": 3,
+      "risk": 5,
+      "tags": []
+    },
+    {
+      "id": "edge-59",
+      "txHash": "0x4dcb7225c6cb025c33b0d1f574e3c68062e2b359",
+      "from": "0x41a30a6c232e6798f619d14d5ef56eeeefe4a453",
+      "to": "0x6ad03ea8bab71e1c2fd98a08ba9d3f2e7bb67156",
+      "valueEth": 3.51268974523832,
+      "timestamp": 1776228046.0079956,
+      "method": "Swap",
+      "directionFromRoot": "side",
+      "hop": 3,
+      "risk": 5,
+      "tags": [
+        "defi-swap"
+      ]
+    },
+    {
+      "id": "edge-60",
+      "txHash": "0x6b4bfba67f1fe0853c8b0704b2d1eaa013263029",
+      "from": "0xe20dafdeebfe2a98979b25640ef558a3ebdd3fce",
+      "to": "0x00098caec988ff2a4974a8d293b94ce4ae0b7554",
+      "valueEth": 2.5676335142006295,
+      "timestamp": 1773734286.6479216,
+      "method": "Transfer",
+      "directionFromRoot": "side",
+      "hop": 4,
+      "risk": 5,
+      "tags": []
+    },
+    {
+      "id": "edge-61",
+      "txHash": "0x30623ddf148f90553c29b0a28a57de85eb385973",
+      "from": "0xe20dafdeebfe2a98979b25640ef558a3ebdd3fce",
+      "to": "0xdf60b1a32c140824a043613e422c44449374ef3b",
+      "valueEth": 4.843952500339596,
+      "timestamp": 1774897070.668729,
+      "method": "Transfer",
+      "directionFromRoot": "side",
+      "hop": 4,
+      "risk": 5,
+      "tags": []
+    },
+    {
+      "id": "edge-62",
+      "txHash": "0xb1584c79aa6beec885be066808786d9251791681",
+      "from": "0xe20dafdeebfe2a98979b25640ef558a3ebdd3fce",
+      "to": "0xbbc88dca869f402a1b48c96bad7ead78cd88e845",
+      "valueEth": 3.1392915431475537,
+      "timestamp": 1774205316.3723955,
+      "method": "Transfer",
+      "directionFromRoot": "side",
+      "hop": 4,
+      "risk": 5,
+      "tags": []
+    },
+    {
+      "id": "edge-63",
+      "txHash": "0xe8fdd3099f4cf80878317ab31c0a2ef156844e2b",
+      "from": "0xe1b5bf6786f5efa186d281b391c0b1f0dcf87ab2",
+      "to": "0x6658687df1b7249d1bcc68a35683d612a95706b7",
+      "valueEth": 4.291240758784321,
+      "timestamp": 1776625927.5293612,
+      "method": "Transfer",
+      "directionFromRoot": "side",
+      "hop": 4,
+      "risk": 65,
+      "tags": []
+    },
+    {
+      "id": "edge-64",
+      "txHash": "0x1ac526c3de58cd457688bc2c7fd7516fef7d86df",
+      "from": "0xe1b5bf6786f5efa186d281b391c0b1f0dcf87ab2",
+      "to": "0xd97659aab08cad6fbff612672657ce5baee58628",
+      "valueEth": 2.485953169883426,
+      "timestamp": 1776073354.4657574,
+      "method": "Transfer",
+      "directionFromRoot": "side",
+      "hop": 4,
+      "risk": 5,
+      "tags": []
+    },
+    {
+      "id": "edge-65",
+      "txHash": "0x2a42ee7ec6cfb959c9becd83e8b5cc11a4e92feb",
+      "from": "0xe1b5bf6786f5efa186d281b391c0b1f0dcf87ab2",
+      "to": "0x6cc0211f5b143c73669627a31b6fce9da9e38d11",
+      "valueEth": 1.2505673331351725,
+      "timestamp": 1773657903.5138643,
+      "method": "Transfer",
+      "directionFromRoot": "side",
+      "hop": 4,
+      "risk": 5,
+      "tags": []
+    },
+    {
+      "id": "edge-66",
+      "txHash": "0x7cfce16294de194d753e151def50301e2bf47ea8",
+      "from": "0x7db4021db21c57661be294dcbe63a141752d4c44",
+      "to": "0xf01265b5e3a0edf004a90587db0ef0b3f7806d5e",
+      "valueEth": 0.48390042883845574,
+      "timestamp": 1774591866.7291288,
+      "method": "Transfer",
+      "directionFromRoot": "side",
+      "hop": 4,
+      "risk": 5,
+      "tags": []
+    },
+    {
+      "id": "edge-67",
+      "txHash": "0x2636bfaf259277e877c2c6fa58a1bd29a016980a",
+      "from": "0x7db4021db21c57661be294dcbe63a141752d4c44",
+      "to": "0x6cf5b4ed197b8627d1a4caee71a45a9b3fafdb7e",
+      "valueEth": 2.0059721312248353,
+      "timestamp": 1778288549.3216555,
+      "method": "Transfer",
+      "directionFromRoot": "side",
+      "hop": 4,
+      "risk": 5,
+      "tags": []
+    },
+    {
+      "id": "edge-68",
+      "txHash": "0xc19184cf042fcb243f4c5543a32584cdd51f6bc1",
+      "from": "0x7db4021db21c57661be294dcbe63a141752d4c44",
+      "to": "0x8b12c064095aa51fbbbde15922a5a2b30a81663f",
+      "valueEth": 2.7855350624397652,
+      "timestamp": 1776323629.3042126,
+      "method": "Transfer",
+      "directionFromRoot": "side",
+      "hop": 4,
+      "risk": 5,
+      "tags": []
+    },
+    {
+      "id": "edge-69",
+      "txHash": "0x10cbd29dad5171c237275779ffcaa3d74b6260c9",
+      "from": "0x80c2c392b2eb7d3d02cae630480372450d7426a2",
+      "to": "0x540216fa0f7b139adc6845802bdb8116370e93e4",
+      "valueEth": 1.0573002180430169,
+      "timestamp": 1775603767.283784,
+      "method": "Transfer",
+      "directionFromRoot": "side",
+      "hop": 4,
+      "risk": 5,
+      "tags": []
+    },
+    {
+      "id": "edge-70",
+      "txHash": "0x798e1334aef9ea34986d5c6968f814336fad5421",
+      "from": "0x80c2c392b2eb7d3d02cae630480372450d7426a2",
+      "to": "0x3b514e1bc19da85a8c52460977ee57d5ad4d3270",
+      "valueEth": 0.9422779285039268,
+      "timestamp": 1776019077.5614295,
+      "method": "Transfer",
+      "directionFromRoot": "side",
+      "hop": 4,
+      "risk": 5,
+      "tags": []
+    },
+    {
+      "id": "edge-71",
+      "txHash": "0xd301c28bc259e14d46296a4641c9e0b79d5a84d4",
+      "from": "0x80c2c392b2eb7d3d02cae630480372450d7426a2",
+      "to": "0x735839df47df404d91b9802338486d3b88c54f2c",
+      "valueEth": 0.5390444613912809,
+      "timestamp": 1777070084.7511399,
+      "method": "Swap",
+      "directionFromRoot": "side",
+      "hop": 4,
+      "risk": 5,
+      "tags": [
+        "defi-swap"
+      ]
+    },
+    {
+      "id": "edge-72",
+      "txHash": "0xcb387f806ba55c540406ddd107740030de9dd27a",
+      "from": "0xee713a08dcf2aff08912a89621615f13e75c8323",
+      "to": "0xe2bc6aaf8b82567033b56f5a3926977fc76cbb50",
+      "valueEth": 0.8473419948199723,
+      "timestamp": 1776058501.8836024,
+      "method": "Transfer",
+      "directionFromRoot": "side",
+      "hop": 4,
+      "risk": 5,
+      "tags": []
+    },
+    {
+      "id": "edge-73",
+      "txHash": "0xd5c1954535f3beb49b6d9c5a1f2b92de360e602b",
+      "from": "0xee713a08dcf2aff08912a89621615f13e75c8323",
+      "to": "0x75ede1f978e859ad5ebc40b7f24fa4292f0f1cef",
+      "valueEth": 2.742121869062007,
+      "timestamp": 1776755112.60891,
+      "method": "Transfer",
+      "directionFromRoot": "side",
+      "hop": 4,
+      "risk": 5,
+      "tags": []
+    },
+    {
+      "id": "edge-74",
+      "txHash": "0xd405bfcd0ed4c5cb5b1add3b5137d173702f08c9",
+      "from": "0xee713a08dcf2aff08912a89621615f13e75c8323",
+      "to": "0xa55a2f37bb029e4082a5a65d71fc5bdc0751b92b",
+      "valueEth": 0.9237435306654962,
+      "timestamp": 1774377122.4746652,
+      "method": "Transfer",
+      "directionFromRoot": "side",
+      "hop": 4,
+      "risk": 65,
+      "tags": []
+    }
+  ]
+}

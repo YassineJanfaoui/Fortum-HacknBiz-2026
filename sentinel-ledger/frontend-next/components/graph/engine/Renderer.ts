@@ -3,29 +3,33 @@ import type { Viewport } from './Viewport';
 
 // Color palette
 const C = {
-  nodeOrigin:     '#3b82f6',
-  nodeMixer:      '#8b5cf6',
+  nodeOrigin: '#3b82f6',
+  nodeMixer: '#8b5cf6',
   nodeSanctioned: '#dc2626',
-  nodeExchange:   '#14b8a6',
-  nodeWallet:     '#475569',
-  nodeCluster:    '#374151',
-  ringHigh:       '#ef4444',
-  ringMedium:     '#f59e0b',
-  ringLow:        '#22c55e',
-  ringCritical:   '#dc2626',
-  taintFill:      'rgba(239,68,68,0.45)',
-  edgeLine:       'rgba(139, 148, 173, 0.55)',
-  edgeSelected:   'rgba(59,130,246,0.85)',
-  edgeArrow:      'rgba(148,163,184,0.35)',
-  edgeArrowSel:   'rgba(59,130,246,0.85)',
-  labelColor:     'rgba(148,163,184,0.9)',
-  labelSel:       '#f1f5f9',
-  nodeBg:         '#0f172a',
-  selGlow:        'rgba(59,130,246,0.25)',
+  nodeExchange: '#14b8a6',
+  nodeWallet: '#475569',
+  nodeCluster: '#374151',
+  ringHigh: '#ef4444',
+  ringMedium: '#f59e0b',
+  ringLow: '#22c55e',
+  ringCritical: '#dc2626',
+  taintFill: 'rgba(239,68,68,0.45)',
+  edgeLine: 'rgba(139, 148, 173, 0.55)',
+  edgeSelected: 'rgba(59,130,246,0.85)',
+  edgeArrow: 'rgba(148,163,184,0.35)',
+  edgeArrowSel: 'rgba(59,130,246,0.85)',
+  labelColor: 'rgba(148,163,184,0.9)',
+  labelSel: '#f1f5f9',
+  nodeBg: '#0f172a',
+  selGlow: 'rgba(59,130,246,0.25)',
 };
 
-export function nodeRadius(txCount: number): number {
-  return Math.min(26, Math.max(10, 10 + Math.log1p(txCount) * 2.2));
+export function getNodeRadius(node: GraphNode): number {
+  if (node.type === 'root') return 32;
+  if (node.type === 'suspicious' || Number(node.risk) >= 70) return 22;
+  if (node.type === 'dex' || node.type === 'exchange') return 24;
+  if (node.type === 'address' || node.type === 'contract') return 14;
+  return Math.min(26, Math.max(10, 10 + Math.log1p(node.tx_count ?? 1) * 2.2));
 }
 
 function ringColor(risk: RiskLevel): string {
@@ -115,7 +119,7 @@ export function renderFrame(
   // ── Edges ──────────────────────────────────────────────────────
   const fmtEur = new Intl.NumberFormat('en-EU', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 });
   const missingNodes: string[] = [];
-  
+
   for (const edge of edges) {
     const fromId = edge.from || (edge as any).source;
     const toId = edge.to || (edge as any).target;
@@ -135,12 +139,30 @@ export function renderFrame(
     const dist = Math.sqrt(dx * dx + dy * dy);
     if (dist < 1) continue;
     const nx = dx / dist; const ny = dy / dist;
-    const sr = nodeRadius(src.tx_count); const tr = nodeRadius(tgt.tx_count);
+    const sr = getNodeRadius(src); const tr = getNodeRadius(tgt);
     const x1 = src.x + nx * sr; const y1 = src.y + ny * sr;
     const x2 = tgt.x - nx * (tr + 5); const y2 = tgt.y - ny * (tr + 5);
 
-    ctx.strokeStyle = isPath ? C.edgeSelected : C.edgeLine;
-    ctx.lineWidth = isPath ? Math.max(edgeWidth(edge.amount_eur), 1.2) : edgeWidth(edge.amount_eur);
+    const edgeTags = edge.tags || [];
+    let edgeColor = isPath ? C.edgeSelected : C.edgeLine;
+    let edgeLabel = fmtEur.format(edge.amount_eur || 0);
+
+    if (edgeTags.includes("dust")) {
+      edgeColor = "#dc2626";
+      edgeLabel = "Dust / spam";
+    } else if (edgeTags.includes("approval")) {
+      edgeColor = "#f59e0b";
+      edgeLabel = "Approval";
+    } else if (edgeTags.includes("defi-swap")) {
+      edgeColor = "#2563eb";
+      edgeLabel = "Swap";
+    } else if (edge.valueEth !== undefined) {
+      edgeColor = "#94a3b8";
+      edgeLabel = `${Number(edge.valueEth).toFixed(6)} ETH`;
+    }
+
+    ctx.strokeStyle = isPath ? C.edgeSelected : edgeColor;
+    ctx.lineWidth = isPath ? Math.max(edgeWidth(edge.amount_eur || 0), 1.2) : edgeWidth(edge.amount_eur || 0);
     ctx.setLineDash(isPath ? [5, 4] : []);
     ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
     ctx.setLineDash([]);
@@ -163,8 +185,8 @@ export function renderFrame(
       }
       ctx.font = `${Math.max(6, 7 * Math.min(1, zoom))}px ui-monospace,monospace`;
       ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
-      ctx.fillStyle = isPath ? C.labelSel : C.labelColor;
-      ctx.fillText(fmtEur.format(edge.amount_eur), 0, -3);
+      ctx.fillStyle = isPath ? C.labelSel : (edgeColor === C.edgeLine ? C.labelColor : edgeColor);
+      ctx.fillText(edgeLabel, 0, -3);
       ctx.restore();
     }
   }
@@ -177,7 +199,7 @@ export function renderFrame(
 
   // ── Nodes ──────────────────────────────────────────────────────
   for (const node of nodes) {
-    const r = nodeRadius(node.tx_count);
+    const r = getNodeRadius(node);
     const isSel = node.id === selectedId;
     const isHov = node.id === hoveredId;
     const inPath = pathNodes.has(node.id);
@@ -185,21 +207,36 @@ export function renderFrame(
 
     ctx.globalAlpha = dimmed ? 0.2 : 1;
 
+    let fc = fillColor(node.type);
+    let glow = false;
+    let customStroke = false;
+    
+    if (node.type === "root") {
+      fc = "#16a34a"; glow = true; customStroke = true;
+    } else if (node.type === "suspicious" || Number(node.risk) >= 70) {
+      fc = "#dc2626"; customStroke = true;
+    } else if (node.type === "dex") {
+      fc = "#2563eb"; customStroke = true;
+    } else if (node.type === "exchange") {
+      fc = "#7c3aed"; customStroke = true;
+    } else if (node.type === "address" || node.type === "contract") {
+      fc = "#64748b"; customStroke = true;
+    }
+
     // Glow behind selected
-    if (isSel) {
-      const g = ctx.createRadialGradient(node.x, node.y, r, node.x, node.y, r + 12);
-      g.addColorStop(0, C.selGlow); g.addColorStop(1, 'transparent');
-      ctx.beginPath(); ctx.arc(node.x, node.y, r + 12, 0, Math.PI * 2);
+    if (isSel || glow) {
+      const g = ctx.createRadialGradient(node.x ?? 0, node.y ?? 0, r, node.x ?? 0, node.y ?? 0, r + (glow ? 18 : 12));
+      g.addColorStop(0, glow ? `${fc}88` : C.selGlow); g.addColorStop(1, 'transparent');
+      ctx.beginPath(); ctx.arc(node.x ?? 0, node.y ?? 0, r + (glow ? 18 : 12), 0, Math.PI * 2);
       ctx.fillStyle = g; ctx.fill();
     }
 
     // Background fill
-    ctx.beginPath(); ctx.arc(node.x, node.y, r, 0, Math.PI * 2);
+    ctx.beginPath(); ctx.arc(node.x ?? 0, node.y ?? 0, r, 0, Math.PI * 2);
     ctx.fillStyle = C.nodeBg; ctx.fill();
 
     // Type fill (inner)
-    const fc = fillColor(node.type);
-    ctx.beginPath(); ctx.arc(node.x, node.y, r * 0.72, 0, Math.PI * 2);
+    ctx.beginPath(); ctx.arc(node.x ?? 0, node.y ?? 0, r * 0.72, 0, Math.PI * 2);
     ctx.fillStyle = fc + 'cc'; ctx.fill();
 
     // Taint overlay
@@ -211,32 +248,32 @@ export function renderFrame(
     }
 
     // Outer ring (risk)
-    ctx.beginPath(); ctx.arc(node.x, node.y, r, 0, Math.PI * 2);
-    ctx.strokeStyle = isSel ? '#ffffff' : ringColor(node.risk);
+    ctx.beginPath(); ctx.arc(node.x ?? 0, node.y ?? 0, r, 0, Math.PI * 2);
+    ctx.strokeStyle = isSel ? '#ffffff' : (customStroke ? fc : ringColor(node.risk as RiskLevel));
     ctx.lineWidth = isSel ? 2 : isHov ? 1.5 : 1;
     ctx.stroke();
 
     // Hover ring
     if (isHov && !isSel) {
-      ctx.beginPath(); ctx.arc(node.x, node.y, r + 3.5, 0, Math.PI * 2);
+      ctx.beginPath(); ctx.arc(node.x ?? 0, node.y ?? 0, r + 3.5, 0, Math.PI * 2);
       ctx.strokeStyle = 'rgba(255,255,255,0.3)'; ctx.lineWidth = 1;
       ctx.stroke();
     }
 
     // Label
     if (!dimmed && zoom > 0.55) {
-      const showLabel = zoom > 1.4 || isSel || isHov || node.type === 'origin' || node.type === 'mixer' || node.type === 'sanctioned';
+      const showLabel = zoom > 1.4 || isSel || isHov || node.type === 'origin' || node.type === 'mixer' || node.type === 'sanctioned' || node.type === 'root' || node.label;
       if (showLabel) {
         const sz = Math.max(8, 9 * Math.min(1, zoom));
         ctx.font = `${sz}px ui-monospace,monospace`;
         ctx.textAlign = 'center'; ctx.textBaseline = 'top';
         ctx.fillStyle = isSel ? C.labelSel : C.labelColor;
-        ctx.fillText(node.entity_label ?? node.short_address, node.x, node.y + r + 4);
+        ctx.fillText(node.label ?? node.entity_label ?? node.short_address ?? node.id, (node.x ?? 0), (node.y ?? 0) + r + 4);
 
-        if (zoom > 1.5 && node.taint > 0) {
+        if (zoom > 1.5 && (node.taint ?? 0) > 0) {
           ctx.font = '7px ui-monospace,monospace';
           ctx.fillStyle = C.ringHigh;
-          ctx.fillText(`${node.taint}%`, node.x, node.y + r + 14);
+          ctx.fillText(`${node.taint}%`, (node.x ?? 0), (node.y ?? 0) + r + 14);
         }
       }
     }

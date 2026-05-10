@@ -14,12 +14,13 @@ export function FreezeModal() {
       <div style={{
         background: 'var(--color-background-primary)',
         border: '1px solid var(--color-border-tertiary)',
-        borderRadius: 8, width: 520, maxWidth: 'calc(100vw - 32px)', boxShadow: '0 20px 40px rgba(0,0,0,0.4)',
+        borderRadius: 8, width: 520, maxWidth: 'calc(100vw - 32px)',
+        maxHeight: 'calc(100dvh - 32px)', boxShadow: '0 20px 40px rgba(0,0,0,0.4)',
         display: 'flex', flexDirection: 'column'
       }}>
         <div style={{
           padding: '16px 24px', borderBottom: '1px solid var(--color-border-tertiary)',
-          background: 'rgba(239, 68, 68, 0.05)', display: 'flex', alignItems: 'center', gap: 12
+          background: 'rgba(239, 68, 68, 0.05)', display: 'flex', alignItems: 'center', gap: 12, flexShrink: 0
         }}>
           <div style={{ width: 8, height: 8, borderRadius: '50%', background: 'var(--color-text-danger)' }} />
           <h2 style={{ fontSize: 16, fontWeight: 600, color: 'var(--color-text-danger)' }}>
@@ -27,22 +28,22 @@ export function FreezeModal() {
           </h2>
         </div>
 
-        <div style={{ padding: 24, display: 'flex', flexDirection: 'column', gap: 16, fontSize: 13, color: 'var(--color-text-secondary)' }}>
-          <div className="grid grid-cols-1 md:grid-cols-[120px_minmax(0,1fr)] gap-2">
+        <div style={{ padding: 24, display: 'flex', flexDirection: 'column', gap: 16, fontSize: 13, color: 'var(--color-text-secondary)', overflowY: 'auto' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '120px minmax(0, 1fr)', gap: 8 }}>
             <span>Account ID:</span>
             <span style={{ color: 'var(--color-text-primary)', fontFamily: 'var(--font-mono)', wordBreak: 'break-all' }}>{freezeModal.accountId}</span>
-            
+
             <span>Frozen amount:</span>
             <span style={{ color: 'var(--color-text-primary)', fontFamily: 'var(--font-mono)', wordBreak: 'break-word' }}>
               {new Intl.NumberFormat('en-EU', { style: 'currency', currency: 'EUR' }).format(freezeModal.amount)} {freezeModal.token}
             </span>
-            
+
             <span>Reason:</span>
             <span style={{ color: 'var(--color-text-primary)', wordBreak: 'break-word' }}>{freezeModal.reason}</span>
-            
+
             <span>Case file:</span>
             <span style={{ color: 'var(--color-text-primary)', fontFamily: 'var(--font-mono)', wordBreak: 'break-all' }}>{freezeModal.caseId}</span>
-            
+
             <span>Authority:</span>
             <span style={{ color: 'var(--color-text-primary)', wordBreak: 'break-word' }}>{freezeModal.authority}</span>
           </div>
@@ -58,13 +59,17 @@ export function FreezeModal() {
             </div>
           </div>
 
-          <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-[12px] mt-2">
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginTop: 8 }}>
             <span>Operator e-signature:</span>
             <input type="text" placeholder="Type name to sign..." className="input" style={{ flex: 1 }} />
           </div>
         </div>
 
-        <div className="flex flex-col md:flex-row justify-end gap-3 p-4 md:px-6 md:py-4 bg-[var(--color-background-secondary)] border-t border-[var(--color-border-tertiary)] rounded-b-lg">
+        <div style={{
+          padding: '16px 24px', borderTop: '1px solid var(--color-border-tertiary)',
+          background: 'var(--color-background-secondary)', display: 'flex', justifyContent: 'flex-end', gap: 12,
+          borderBottomLeftRadius: 8, borderBottomRightRadius: 8
+        }}>
           <button className="btn" onClick={closeFreezeModal}>Cancel</button>
           <button className="btn btn-primary" style={{ background: 'var(--color-text-danger)' }} onClick={closeFreezeModal}>
             Confirm freeze + file

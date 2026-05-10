@@ -35,7 +35,7 @@ export function AgentFeed() {
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', overflow: 'hidden', borderBottom: '0.5px solid var(--color-border-tertiary)', height: '100%' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', overflow: 'hidden', borderBottom: '0.5px solid var(--color-border-tertiary)' }}>
       <div className="panel-hd">
         Agent Pipeline
         {activeInvestigation && (

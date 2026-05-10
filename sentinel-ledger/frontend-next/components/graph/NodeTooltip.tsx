@@ -49,7 +49,7 @@ export function NodeTooltip({ node, x, y }: Props) {
 
       <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 11 }}>
         <tbody>
-          <Row label="Risk" value={node.risk.toUpperCase()} color={riskColor(node.risk)} />
+          <Row label="Risk" value={String(node.risk).toUpperCase()} color={riskColor(node.risk)} />
           <Row label="Taint" value={`${node.taint}%`} color={node.taint > 70 ? 'var(--risk-high)' : 'var(--text-primary)'} />
           <Row label="Tx count" value={formatNumber(node.tx_count)} />
           <Row label="Volume" value={formatEur(node.tx_count * 1000)} />

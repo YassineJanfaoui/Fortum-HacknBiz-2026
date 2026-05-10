@@ -1,0 +1,107 @@
+{
+  "meta": {
+    "name": "Vitalik demo transaction graph",
+    "root": "0xd8da6bf26964af9d7eed9e03e53415d37aa96045",
+    "rootLabel": "vitalik.eth",
+    "generatedAt": "2026-05-10T00:00:00.000Z",
+    "seedTxCount": 30,
+    "maxHops": 5,
+    "description": "Presentation-safe graph fixture generated from latest root transactions and capped multi-hop expansion."
+  },
+  "nodes": [
+    {
+      "id": "0xd8da6bf26964af9d7eed9e03e53415d37aa96045",
+      "label": "vitalik.eth",
+      "type": "root",
+      "hop": 0,
+      "risk": 0,
+      "tags": ["known-public-wallet"]
+    },
+    {
+      "id": "0xspam1",
+      "label": "Spammer 1",
+      "type": "suspicious",
+      "hop": 1,
+      "risk": 80,
+      "tags": ["dust"]
+    },
+    {
+      "id": "0xuniswap",
+      "label": "Uniswap V2 Router",
+      "type": "dex",
+      "hop": 1,
+      "risk": 10,
+      "tags": []
+    },
+    {
+      "id": "0xcontract",
+      "label": "Some Token",
+      "type": "contract",
+      "hop": 1,
+      "risk": 10,
+      "tags": []
+    },
+    {
+      "id": "0xunknown",
+      "label": "0xab12...cdef",
+      "type": "address",
+      "hop": 1,
+      "risk": 5,
+      "tags": []
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge1",
+      "txHash": "0xtx1",
+      "from": "0xspam1",
+      "to": "0xd8da6bf26964af9d7eed9e03e53415d37aa96045",
+      "valueEth": 0.000001,
+      "timestamp": 1700000000,
+      "method": "Transfer",
+      "directionFromRoot": "in",
+      "hop": 1,
+      "risk": 80,
+      "tags": ["dust", "impersonation-noise"]
+    },
+    {
+      "id": "edge2",
+      "txHash": "0xtx2",
+      "from": "0xd8da6bf26964af9d7eed9e03e53415d37aa96045",
+      "to": "0xuniswap",
+      "valueEth": 5.0,
+      "timestamp": 1700000000,
+      "method": "SwapExactETHForTokens",
+      "directionFromRoot": "out",
+      "hop": 1,
+      "risk": 20,
+      "tags": ["defi-swap"]
+    },
+    {
+      "id": "edge3",
+      "txHash": "0xtx3",
+      "from": "0xd8da6bf26964af9d7eed9e03e53415d37aa96045",
+      "to": "0xcontract",
+      "valueEth": 0,
+      "timestamp": 1700000000,
+      "method": "Approve",
+      "directionFromRoot": "out",
+      "hop": 1,
+      "risk": 35,
+      "tags": ["approval"]
+    },
+    {
+      "id": "edge4",
+      "txHash": "0xtx4",
+      "from": "0xd8da6bf26964af9d7eed9e03e53415d37aa96045",
+      "to": "0xunknown",
+      "valueEth": 10.5,
+      "timestamp": 1700000000,
+      "method": "Transfer",
+      "directionFromRoot": "out",
+      "hop": 1,
+      "risk": 5,
+      "tags": []
+    }
+  ]
+}

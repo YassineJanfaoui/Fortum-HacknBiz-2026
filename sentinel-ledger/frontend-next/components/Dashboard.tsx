@@ -20,6 +20,7 @@ import { ReplayScrubber } from './demo/ReplayScrubber';
 export function Dashboard() {
   const { setSelectedNodeId, hitlVisible, demoMode } = useDashboardStore();
   const [showModal, setShowModal] = useState(false);
+  const [mobileTab, setMobileTab] = useState<'feed' | 'graph' | 'analysis'>('feed');
 
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
     if (e.key === '/' && (e.target as HTMLElement).tagName !== 'INPUT' && (e.target as HTMLElement).tagName !== 'TEXTAREA') {
@@ -39,41 +40,39 @@ export function Dashboard() {
 
   return (
     <>
-      <div className="flex flex-col md:grid h-[100dvh] w-full overflow-y-auto md:overflow-hidden bg-[var(--color-background-tertiary)]" style={{
+      <div className="flex flex-col md:grid h-[100dvh] w-full overflow-hidden bg-[var(--color-background-tertiary)]" style={{
         gridTemplateRows: '44px 1fr',
         gridTemplateColumns: '260px minmax(0, 1fr) 280px',
         gridTemplateAreas: '"topbar topbar topbar" "feed graph right"',
       }}>
         <TopBar onNewTx={() => setShowModal(true)} />
 
-        <div className="h-[400px] md:h-auto border-b border-[var(--color-border-tertiary)] md:border-b-0" style={{ gridArea: 'feed', overflow: 'hidden', minWidth: 0 }}>
+        {/* Mobile Tabs Header */}
+        <div className="flex md:hidden bg-[var(--color-background-primary)] border-b border-[var(--color-border-tertiary)] flex-shrink-0 z-10 w-full" style={{ gridArea: 'mobile-tabs' }}>
+          <button className={`flex-1 py-3 text-xs font-semibold tracking-wide ${mobileTab === 'feed' ? 'text-[var(--color-text-info)] border-b-2 border-[var(--color-text-info)]' : 'text-[var(--color-text-secondary)]'}`} onClick={() => setMobileTab('feed')}>FEED</button>
+          <button className={`flex-1 py-3 text-xs font-semibold tracking-wide ${mobileTab === 'graph' ? 'text-[var(--color-text-info)] border-b-2 border-[var(--color-text-info)]' : 'text-[var(--color-text-secondary)]'}`} onClick={() => setMobileTab('graph')}>GRAPH</button>
+          <button className={`flex-1 py-3 text-xs font-semibold tracking-wide ${mobileTab === 'analysis' ? 'text-[var(--color-text-info)] border-b-2 border-[var(--color-text-info)]' : 'text-[var(--color-text-secondary)]'}`} onClick={() => setMobileTab('analysis')}>ANALYSIS</button>
+        </div>
+
+        <div className={`${mobileTab === 'feed' ? 'flex' : 'hidden'} md:flex flex-col flex-1 min-h-0 border-r border-[var(--color-border-tertiary)]`} style={{ gridArea: 'feed', overflow: 'hidden' }}>
           {demoMode ? <DemoPanel /> : <TransactionFeed />}
         </div>
 
-        <main className="h-[500px] md:h-auto border-b md:border-b-0 border-[var(--color-border-tertiary)]" style={{
+        <main className={`${mobileTab === 'graph' ? 'flex' : 'hidden'} md:flex flex-col flex-1 min-h-0 bg-[var(--color-background-primary)] border-x border-[var(--color-border-tertiary)]`} style={{
           gridArea: 'graph',
           overflow: 'hidden',
-          minWidth: 0,
-          display: 'flex',
-          flexDirection: 'column',
-          background: 'var(--color-background-primary)',
-          borderRight: '0.5px solid var(--color-border-tertiary)',
-          borderLeft: '0.5px solid var(--color-border-tertiary)',
         }}>
           <WalletGraph />
         </main>
 
-        <aside className="flex flex-col md:grid border-b border-[var(--color-border-tertiary)] md:border-b-0" style={{
+        <aside className={`${mobileTab === 'analysis' ? 'flex' : 'hidden'} md:grid flex-col flex-1 min-h-0 overflow-y-auto md:overflow-hidden bg-[var(--color-background-primary)]`} style={{
           gridArea: 'right',
           gridTemplateRows: hitlVisible ? '1fr 170px 190px 52px' : '1fr 170px 190px',
-          overflow: 'hidden',
-          minWidth: 0,
-          background: 'var(--color-background-primary)',
         }}>
           <div className="h-[300px] md:h-auto overflow-hidden"><AgentFeed /></div>
           <div className="h-[200px] md:h-auto overflow-hidden"><ExplainPanel /></div>
           <div className="h-[200px] md:h-auto overflow-hidden"><AuditTimeline /></div>
-          {hitlVisible && <div className="h-auto md:h-auto overflow-hidden"><HITLBar /></div>}
+          {hitlVisible && <div className="h-auto md:h-auto overflow-hidden border-t border-[var(--color-border-tertiary)]"><HITLBar /></div>}
         </aside>
       </div>
 

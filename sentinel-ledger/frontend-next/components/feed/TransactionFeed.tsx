@@ -94,6 +94,12 @@ export function TransactionFeed() {
         setGraphWallet(walletFrom);
         setGraphHops(3);
         try {
+          const demoGraph = await (await import('@/lib/demo-graph')).resolveDemoGraph(walletFrom, 3);
+          if (demoGraph) {
+            setGraph(demoGraph.nodes as any, demoGraph.edges as any);
+            return;
+          }
+
           const trace = await api.walletTrace(walletFrom, 3, 6, 60);
           const { nodes, edges } = traceToSubgraph(trace, walletFrom);
           
@@ -185,7 +191,7 @@ export function TransactionFeed() {
             No transactions
           </div>
         ) : (
-          visible.map((tx) => (
+          visible.filter((tx, i, arr) => arr.findIndex(t => t.tx_id === tx.tx_id) === i).map((tx) => (
             <TransactionItem
               key={tx.tx_id}
               tx={tx}
@@ -218,9 +224,9 @@ function simulateAgentEvents(
 
     setTimeout(() => {
       agentLines(agent, state, reasons).forEach((line, j) => {
-        setTimeout(() => append({ agent, line, state, ts: now + i * 0.5 + j * 0.1 }), j * 100);
+        setTimeout(() => append({ agent, line, state, ts: now + i * 0.8 + j * 0.4 }), j * 400);
       });
-    }, i * 350);
+    }, i * 800);
   });
 }
 

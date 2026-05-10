@@ -19,6 +19,13 @@ export function WalletGraph() {
     setGraphLoading(true);
     setSelectedNodeId(null);
     try {
+      const demoGraph = await (await import('@/lib/demo-graph')).resolveDemoGraph(address, hops);
+      if (demoGraph) {
+        setGraph(demoGraph.nodes as any, demoGraph.edges as any);
+        setGraphLoading(false);
+        return;
+      }
+
       const trace = await api.walletTrace(address, hops, 8, 120);
       const { nodes, edges } = traceToSubgraph(trace, address);
       if (nodes.length === 0) {
