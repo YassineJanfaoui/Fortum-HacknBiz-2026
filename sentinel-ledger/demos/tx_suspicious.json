@@ -1,0 +1,13 @@
+{
+  "tx_id": "TX-SUSP-002",
+  "wallet_from": "0xC0ffee254729296a45a3885639AC7E10F9d54979",
+  "wallet_to": "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb1",
+  "amount_eur": 47300.00,
+  "token": "ETH",
+  "chain": "ethereum",
+  "timestamp": 1715100000,
+  "velocity_24h": 8,
+  "tx_count_7d": 12,
+  "jurisdiction": "FR",
+  "memo": "Invoice payment"
+}

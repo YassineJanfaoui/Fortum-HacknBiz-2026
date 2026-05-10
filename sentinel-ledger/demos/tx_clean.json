@@ -1,0 +1,13 @@
+{
+  "tx_id": "TX-CLEAN-001",
+  "wallet_from": "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045",
+  "wallet_to": "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb1",
+  "amount_eur": 350.00,
+  "token": "ETH",
+  "chain": "ethereum",
+  "timestamp": 1715000000,
+  "velocity_24h": 2,
+  "tx_count_7d": 5,
+  "jurisdiction": "FR",
+  "memo": "Payment for consulting services"
+}

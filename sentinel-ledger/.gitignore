@@ -1,0 +1,9 @@
+.env
+__pycache__/
+*.pyc
+.pytest_cache/
+sentinel_audit.db
+.venv/
+venv/
+data/sanctions_*.json
+node_modules/
