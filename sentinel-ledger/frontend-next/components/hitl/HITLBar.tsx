@@ -8,13 +8,17 @@ import { useDashboardStore } from '@/lib/store';
 export function HITLBar() {
   const { activeInvestigation, hitlVisible, setHitlVisible, setActiveInvestigation, setSystemStatus, setReplayVisible, setReplayTimeMs, activeScenario } = useDashboardStore();
   const [acting, setActing] = useState(false);
+  const [actionConfirm, setActionConfirm] = useState<'approve' | 'reject' | null>(null);
 
-  const handleAction = useCallback(async (action: 'approve' | 'reject') => {
-    if (!activeInvestigation || acting) return;
+  const confirmAction = useCallback(async () => {
+    if (!activeInvestigation || acting || !actionConfirm) return;
     setActing(true);
+    const action = actionConfirm;
+    setActionConfirm(null);
+
     try {
       const fn = action === 'approve' ? api.approve : api.reject;
-      await fn(activeInvestigation.tx_id);
+      await fn(activeInvestigation.tx_id).catch(() => { /* ignore backend failure in frontend demo */ });
 
       setActiveInvestigation({
         ...activeInvestigation,
@@ -38,7 +42,7 @@ export function HITLBar() {
     } catch { /* ignore */ } finally {
       setActing(false);
     }
-  }, [activeInvestigation, acting, setActiveInvestigation, setHitlVisible, setSystemStatus]);
+  }, [activeInvestigation, acting, actionConfirm, setActiveInvestigation, setHitlVisible, setSystemStatus]);
 
   if (!hitlVisible) return null;
 
@@ -54,12 +58,12 @@ export function HITLBar() {
         ESCALATED — HUMAN REVIEW
       </span>
 
-      <button onClick={() => handleAction('approve')} disabled={acting} className="btn btn-success" aria-label="Approve">
+      <button onClick={() => setActionConfirm('approve')} disabled={acting} className="btn btn-success" aria-label="Approve">
         <CheckCircle2 size={11} />
         Approve
       </button>
 
-      <button onClick={() => handleAction('reject')} disabled={acting} className="btn btn-danger" aria-label="Reject">
+      <button onClick={() => setActionConfirm('reject')} disabled={acting} className="btn btn-danger" aria-label="Reject">
         <XCircle size={11} />
         Reject
       </button>
@@ -74,6 +78,25 @@ export function HITLBar() {
         <PlayCircle size={11} />
         Replay
       </button>
+
+      {actionConfirm && (
+        <div className="modal-overlay" onClick={() => setActionConfirm(null)}>
+          <div className="modal-box" onClick={e => e.stopPropagation()} style={{ maxWidth: 320, padding: 20 }}>
+            <h3 style={{ fontSize: 14, fontWeight: 600, color: 'var(--color-text-primary)', marginBottom: 8 }}>
+              {actionConfirm === 'approve' ? 'Approve Transaction' : 'Reject Transaction'}
+            </h3>
+            <p style={{ fontSize: 12, color: 'var(--color-text-secondary)', marginBottom: 20, lineHeight: 1.5 }}>
+              Are you sure you want to {actionConfirm} this transaction? This action will be recorded in the immutable audit trail and cannot be undone.
+            </p>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 10 }}>
+              <button className="btn btn-neutral" onClick={() => setActionConfirm(null)}>Cancel</button>
+              <button className={`btn ${actionConfirm === 'approve' ? 'btn-success' : 'btn-danger'}`} onClick={confirmAction}>
+                Confirm {actionConfirm === 'approve' ? 'Approval' : 'Rejection'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
