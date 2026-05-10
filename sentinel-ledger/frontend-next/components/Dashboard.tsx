@@ -18,9 +18,8 @@ import { ScenarioCompleteModal } from './demo/ScenarioCompleteModal';
 import { ReplayScrubber } from './demo/ReplayScrubber';
 
 export function Dashboard() {
-  const { setSelectedNodeId, hitlVisible, demoMode } = useDashboardStore();
+  const { setSelectedNodeId, hitlVisible, demoMode, mobileTab, setMobileTab } = useDashboardStore();
   const [showModal, setShowModal] = useState(false);
-  const [mobileTab, setMobileTab] = useState<'feed' | 'graph' | 'analysis'>('feed');
 
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
     if (e.key === '/' && (e.target as HTMLElement).tagName !== 'INPUT' && (e.target as HTMLElement).tagName !== 'TEXTAREA') {

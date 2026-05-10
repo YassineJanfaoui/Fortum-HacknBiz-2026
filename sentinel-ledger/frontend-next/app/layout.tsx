@@ -3,7 +3,7 @@ import type { ReactNode } from 'react';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Sentinel Ledger — AML Command Center',
+  title: 'Hyper Ledger — AML Command Center',
   description: 'Multi-agent AML governance and compliance platform — NORDA Bank',
 };
 

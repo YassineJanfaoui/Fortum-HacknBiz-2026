@@ -121,6 +121,10 @@ interface DashboardStore {
   setReplayVisible: (b: boolean) => void;
   replayTimeMs: number;
   setReplayTimeMs: (ms: number) => void;
+
+  // Mobile
+  mobileTab: 'feed' | 'graph' | 'analysis';
+  setMobileTab: (tab: 'feed' | 'graph' | 'analysis') => void;
 }
 
 export const useDashboardStore = create<DashboardStore>((set) => ({
@@ -205,4 +209,8 @@ export const useDashboardStore = create<DashboardStore>((set) => ({
   setReplayVisible: (b) => set({ replayVisible: b }),
   replayTimeMs: 0,
   setReplayTimeMs: (ms) => set({ replayTimeMs: ms }),
+
+  // Mobile
+  mobileTab: 'feed',
+  setMobileTab: (tab) => set({ mobileTab: tab }),
 }));

@@ -33,7 +33,7 @@ export function TopBar({ onNewTx }: Props) {
       {/* Logo */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 0, userSelect: 'none' }}>
         <span style={{ fontSize: 13, fontWeight: 600, letterSpacing: '.08em', color: 'var(--color-text-primary)' }}>
-          SENTINEL&nbsp;
+          HYPER&nbsp;
         </span>
         <span style={{ fontSize: 13, fontWeight: 600, letterSpacing: '.08em', color: 'var(--color-text-danger)' }}>
           LEDGER

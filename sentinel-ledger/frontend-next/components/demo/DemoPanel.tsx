@@ -12,7 +12,7 @@ export function DemoPanel() {
     setInjectionBlocked, setDemoInvestigationReasons,
     setDemoInvestigationConfidence, addDemoAuditEntry,
     openFreezeModal, showCustomerNotification, setScenarioComplete,
-    setGraphHighlightPath, setSarDraftOpen
+    setGraphHighlightPath, setSarDraftOpen, setMobileTab
   } = useDashboardStore();
 
   const runnerRef = useRef<ScenarioRunner | null>(null);
@@ -43,6 +43,7 @@ export function DemoPanel() {
   const handlePlay = (scenario: typeof SCENARIOS[0]) => {
     setActiveScenario(scenario);
     runnerRef.current?.play(scenario);
+    setMobileTab('graph');
   };
 
   return (
