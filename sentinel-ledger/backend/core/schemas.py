@@ -78,10 +78,12 @@ class Decision(str, Enum):
 class AuditRecord(BaseModel):
     tx_id: str
     timestamp: float
+    tx_summary: dict = Field(default_factory=dict)
     inputs_hash: str        # sha256 of raw inputs
     agent_outputs: dict     # all agent outputs (jsonable)
     governance_decision: str
     governance_reason: str
+    requires_hitl: bool = False
     explanation: str
     zk_bundle: dict
     human_decision: Optional[str] = None

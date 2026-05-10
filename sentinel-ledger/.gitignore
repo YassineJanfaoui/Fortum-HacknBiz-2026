@@ -3,7 +3,11 @@ __pycache__/
 *.pyc
 .pytest_cache/
 sentinel_audit.db
+/package-lock.json
 .venv/
 venv/
 data/sanctions_*.json
 node_modules/
+frontend-next/.next/
+frontend-next/out/
+frontend-next/.env.local

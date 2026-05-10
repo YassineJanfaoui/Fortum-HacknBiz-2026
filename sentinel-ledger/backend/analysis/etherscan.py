@@ -9,7 +9,7 @@ from backend.core.config import settings
 
 logger = logging.getLogger(__name__)
 
-BASE_URL = "https://api.etherscan.io/api"
+BASE_URL = "https://api.etherscan.io/v2/api"
 _CACHE: dict = {}  # {key: (timestamp, value)}
 _CACHE_TTL = 3600  # 1 hour
 
@@ -27,14 +27,14 @@ async def _get(params: dict) -> dict:
             await asyncio.sleep(_MIN_INTERVAL - elapsed)
         _last_call[0] = time.monotonic()
 
-    params["apikey"] = settings.ETHERSCAN_API_KEY
+    params = {"chainid": "1", **params, "apikey": settings.ETHERSCAN_API_KEY}
     try:
         async with httpx.AsyncClient(timeout=10.0) as client:
             r = await client.get(BASE_URL, params=params)
             return r.json()
     except Exception as exc:
         logger.warning("Etherscan request failed (likely missing API key or offline): %s", exc)
-        wallet = params.get("address", "0xDemoWallet")
+        return {"status": "0", "message": "OFFLINE", "result": []}
         
 def _generate_mock_txs(wallet: str) -> list[dict]:
     import random
@@ -80,6 +80,7 @@ async def get_tx_history(wallet: str, limit: int = 100) -> list[dict]:
     if cached is not None:
         return cached
 
+    is_real_result = True
     try:
         data = await _get({
             "module": "account", "action": "txlist",
@@ -93,8 +94,10 @@ async def get_tx_history(wallet: str, limit: int = 100) -> list[dict]:
     if not isinstance(result, list) or len(result) == 0 or (len(result) > 0 and not isinstance(result[0], dict)):
         logger.warning("Etherscan returned invalid data (likely missing API key). Falling back to mock data.")
         result = _generate_mock_txs(wallet)
+        is_real_result = False
         
-    _CACHE[key] = (now, result)
+    if is_real_result:
+        _CACHE[key] = (now, result)
     return result
 
 
@@ -108,6 +111,25 @@ async def get_token_transfers(wallet: str, limit: int = 50) -> list[dict]:
 
     data = await _get({
         "module": "account", "action": "tokentx",
+        "address": wallet, "startblock": 0, "endblock": 99999999,
+        "page": 1, "offset": limit, "sort": "desc",
+    })
+    result = data.get("result", [])
+    result = result if isinstance(result, list) else []
+    _CACHE[key] = (now, result)
+    return result
+
+
+async def get_internal_transactions(wallet: str, limit: int = 50) -> list[dict]:
+    """Fetch internal transaction traces for a wallet."""
+    key = ("internal_txs", wallet, limit)
+    now = time.time()
+    cached = _cached(key, now)
+    if cached is not None:
+        return cached
+
+    data = await _get({
+        "module": "account", "action": "txlistinternal",
         "address": wallet, "startblock": 0, "endblock": 99999999,
         "page": 1, "offset": limit, "sort": "desc",
     })

@@ -10,6 +10,8 @@ from backend.core.schemas import Transaction
 from backend.core.graph import build_graph
 from backend.core.config import settings
 from backend.audit.store import AuditStore
+from backend.analysis.flow_tracer import trace_wallet_flows
+from backend.analysis.wallet_intelligence import scan_wallet
 from backend.security.guard import detect_injection, normalize_text, make_canary
 from backend.security.pseudonymizer import pseudonymize_wallet
 
@@ -137,11 +139,73 @@ async def audit_list(limit: int = 50, offset: int = 0):
     return [r.model_dump() for r in records]
 
 
+@app.get("/audit/verify")
+async def audit_verify():
+    """Verify the full tamper-evident audit chain."""
+    ok, errors = store.verify_chain()
+    return {"ok": ok, "errors": errors}
+
+
 @app.get("/hitl/pending")
 async def hitl_pending():
     """List transactions pending human review."""
     records = store.pending_hitl()
     return [r.model_dump() for r in records]
+
+
+@app.get("/dashboard/summary")
+async def dashboard_summary():
+    """Return compact operational metrics for dashboard clients."""
+    records = store.all_records(limit=500, offset=0)
+    total = len(records)
+    decisions: dict[str, int] = {}
+    total_amount = 0.0
+    high_risk = 0
+    pending_hitl = 0
+
+    for record in records:
+        decisions[record.governance_decision] = decisions.get(record.governance_decision, 0) + 1
+        total_amount += float(record.tx_summary.get("amount_eur", 0) or 0)
+        if record.requires_hitl and record.human_decision is None:
+            pending_hitl += 1
+        if record.governance_decision.startswith("BLOCK") or record.requires_hitl:
+            high_risk += 1
+
+    chain_ok, chain_errors = store.verify_chain()
+    return {
+        "total_transactions": total,
+        "total_amount_eur": round(total_amount, 2),
+        "pending_hitl": pending_hitl,
+        "high_risk_transactions": high_risk,
+        "decisions": decisions,
+        "audit_chain_ok": chain_ok,
+        "audit_chain_errors": chain_errors,
+        "recent": [r.model_dump() for r in records[:10]],
+    }
+
+
+@app.get("/wallet/{address}/intelligence")
+async def wallet_intelligence(address: str, limit: int = 250):
+    """Run live wallet intelligence using Etherscan account APIs and deterministic heuristics."""
+    if not address.startswith("0x") or len(address) != 42:
+        raise HTTPException(status_code=400, detail="address must be a 42-character EVM address")
+    try:
+        return await scan_wallet(address, limit=limit)
+    except Exception as exc:
+        logger.exception("Wallet intelligence failed for address=%s", address)
+        raise HTTPException(status_code=500, detail=str(exc))
+
+
+@app.get("/wallet/{address}/trace")
+async def wallet_trace(address: str, depth: int = 3, fanout: int = 6, limit: int = 60):
+    """Follow likely outbound fund movement paths across multiple blockchain hops."""
+    if not address.startswith("0x") or len(address) != 42:
+        raise HTTPException(status_code=400, detail="address must be a 42-character EVM address")
+    try:
+        return await trace_wallet_flows(address, depth=depth, fanout=fanout, limit=limit)
+    except Exception as exc:
+        logger.exception("Wallet trace failed for address=%s", address)
+        raise HTTPException(status_code=500, detail=str(exc))
 
 
 # Mount the verifier router

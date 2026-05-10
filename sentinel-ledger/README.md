@@ -5,6 +5,26 @@
 
 ## Quick Start
 
+### Windows PowerShell
+
+```powershell
+cd sentinel-ledger
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+cd frontend-next
+npm install
+cd ..
+python scripts/generate_secrets.py
+# Copy .env.example to .env, paste generated internal secrets, then add GEMINI_API_KEY and ETHERSCAN_API_KEY.
+python scripts/build_sanctions.py
+powershell -ExecutionPolicy Bypass -File scripts/start_dev.ps1
+```
+
+Open `http://127.0.0.1:3000`.
+
+### Manual / Unix-like
+
 ```bash
 # 1. Clone and enter repo
 cd sentinel-ledger
@@ -28,7 +48,7 @@ pip install -r requirements.txt
 # 5. Copy and fill in secrets
 cp .env.example .env
 python scripts/generate_secrets.py  # prints generated secrets — paste into .env
-# Then add ANTHROPIC_API_KEY and ETHERSCAN_API_KEY
+# Then add GEMINI_API_KEY and ETHERSCAN_API_KEY
 
 # 6. Build sanctions Merkle tree (downloads OFAC SDN ~4MB)
 python scripts/build_sanctions.py
@@ -36,9 +56,19 @@ python scripts/build_sanctions.py
 # 7. Start backend API
 uvicorn backend.api.main:app --reload --port 8000
 
-# 8. Start frontend (new terminal)
-streamlit run frontend/app.py --server.port 8501
+# 8. Start the professional Next.js dashboard (new terminal)
+cd frontend-next
+npm install
+npm run dev
 ```
+
+## Clean Generated Files
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts/clean_generated.ps1
+```
+
+This removes local caches, `.next`, the generated SQLite audit database, stray root package locks, and duplicate root-level OPA binaries. It does not delete `.env`, `.venv`, `node_modules`, or source files.
 
 ## Demo Scenarios
 
@@ -55,11 +85,35 @@ make demo-suspicious
 make demo-injection
 ```
 
+## Internal Dashboard
+
+The primary UI is the Next.js dashboard in `frontend-next/`.
+
+Key operator views:
+- **Graph Ops**: multi-hop transaction intelligence graph with animated fund movement, split-route markers, terminal endpoints, live feed, agent activity, and governance timeline.
+- **Transaction Scan**: full Sentinel pipeline for a bank transfer or crypto deposit event.
+- **Audit Ledger**: signed audit records with OPA findings, wallet risk, LLM call count, Merkle root, HMAC signature, HITL controls, and independent proof checks.
+
+Example live wallet scans:
+
+```bash
+# Public wallet
+curl "http://localhost:8000/wallet/0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045/intelligence?limit=50"
+
+# High-volume exchange wallet
+curl "http://localhost:8000/wallet/0x28C6c06298d514Db089934071355E5743bf21d60/intelligence?limit=50"
+
+# Multi-hop flow trace for the graph dashboard
+curl "http://localhost:8000/wallet/0x28C6c06298d514Db089934071355E5743bf21d60/trace?depth=3&fanout=6&limit=60"
+```
+
+The Etherscan wrapper uses the current V2 endpoint with `chainid=1`. If the key or network fails, demo transaction analysis still falls back safely, and the graph trace returns a deterministic demo cluster so the dashboard remains usable. Live intelligence is most useful with a valid `ETHERSCAN_API_KEY`.
+
 ### 🎤 Pitch Script (1-Minute Demo)
 
 **"Welcome to Sentinel Ledger, the future of AI-driven compliance."**
 
-**[Click 'Run Full Demo' in Sidebar]**
+**[Open the Next.js dashboard at http://localhost:3000]**
 
 1. **"First, we process a standard transaction."**
    * *(Clean Tx runs)*
@@ -94,11 +148,12 @@ TxIntelligence → WalletReputation → ZKCompliance → CompliancePolicy → Ex
 
 ```bash
 pytest tests/ -v
+cd frontend-next && npm run build
 ```
 
 ## Project Structure
 
-See `sentinel_ledger_buildspec.md` §5 for the full tree.
+See `docs/sentinel_ledger_buildspec.md` §5 for the original build tree.
 
 ## OPA on Windows (note)
 

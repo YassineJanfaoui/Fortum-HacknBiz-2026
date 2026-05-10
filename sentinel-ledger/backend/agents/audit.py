@@ -44,6 +44,16 @@ async def audit_agent(state: AgentState) -> AgentState:
     record = AuditRecord(
         tx_id=tx.tx_id,
         timestamp=time.time(),
+        tx_summary={
+            "wallet_from": tx.wallet_from,
+            "wallet_to": tx.wallet_to,
+            "amount_eur": tx.amount_eur,
+            "token": tx.token,
+            "chain": tx.chain,
+            "jurisdiction": tx.jurisdiction,
+            "velocity_24h": tx.velocity_24h,
+            "tx_count_7d": tx.tx_count_7d,
+        },
         inputs_hash=inputs_hash,
         agent_outputs={
             "tx_risk": tx_risk.model_dump() if tx_risk else None,
@@ -55,6 +65,7 @@ async def audit_agent(state: AgentState) -> AgentState:
         },
         governance_decision=gov_str,
         governance_reason=state.get("governance_reason", ""),
+        requires_hitl=state.get("requires_hitl", False),
         explanation=state.get("explanation", ""),
         zk_bundle=zk_dict,
         prev_record_hash=store.latest_hash(),

@@ -6,7 +6,13 @@ from backend.core.graph import build_graph
 from backend.core.schemas import Decision, Transaction, TxRiskOutput
 
 @pytest.fixture(autouse=True)
-def mock_external_calls():
+def mock_external_calls(tmp_path, monkeypatch):
+    from backend.core.config import settings
+    import backend.agents.audit as audit_module
+
+    monkeypatch.setattr(settings, "DATABASE_URL", f"sqlite:///{tmp_path / 'sentinel_audit.db'}")
+    audit_module._store = None
+
     with patch("backend.agents.transaction_intelligence.safe_llm_structured_call", new_callable=AsyncMock) as mock_struct, \
          patch("backend.agents.explainability.safe_llm_text_call", new_callable=AsyncMock) as mock_text, \
          patch("backend.analysis.etherscan.get_tx_history", new_callable=AsyncMock) as mock_etherscan:

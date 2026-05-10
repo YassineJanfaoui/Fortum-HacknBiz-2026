@@ -3,8 +3,6 @@ import json
 import sqlite3
 import hashlib
 import hmac
-import time
-from pathlib import Path
 from typing import Optional
 from backend.core.schemas import AuditRecord
 
@@ -101,13 +99,24 @@ class AuditStore:
         errors: list[str] = []
         with self._connect() as conn:
             rows = conn.execute(
-                "SELECT id, tx_id, record_json, record_hash, signature FROM audit_records ORDER BY id ASC"
+                """
+                SELECT id, tx_id, record_json, record_hash, signature
+                FROM audit_records
+                ORDER BY id ASC
+                """
             ).fetchall()
 
+        expected_prev = _GENESIS_HASH
         for row in rows:
-            record = AuditRecord.model_validate_json(row["record_json"])
-            data = record.model_dump(exclude={"signature"})
+            data = json.loads(row["record_json"])
+            record_prev_hash = data.get("prev_record_hash", "")
+            data.pop("signature", None)
             canonical = json.dumps(data, sort_keys=True, default=str)
+
+            if record_prev_hash != expected_prev:
+                errors.append(
+                    f"Record id={row['id']} tx_id={row['tx_id']}: prev hash mismatch"
+                )
 
             # Verify HMAC
             expected_sig = self._sign(canonical)
@@ -118,6 +127,7 @@ class AuditStore:
             expected_hash = self._hash_record(canonical)
             if expected_hash != row["record_hash"]:
                 errors.append(f"Record id={row['id']} tx_id={row['tx_id']}: hash mismatch")
+            expected_prev = row["record_hash"]
 
         return len(errors) == 0, errors
 
@@ -140,13 +150,17 @@ class AuditStore:
             rows = conn.execute(
                 """
                 SELECT record_json FROM audit_records
-                WHERE json_extract(record_json, '$.human_decision') IS NULL
+                WHERE id IN (
+                    SELECT MAX(id) FROM audit_records GROUP BY tx_id
+                )
+                  AND json_extract(record_json, '$.requires_hitl') = 1
+                  AND json_extract(record_json, '$.human_decision') IS NULL
                 ORDER BY id DESC
                 """
             ).fetchall()
         results = []
         for r in rows:
             rec = AuditRecord.model_validate_json(r["record_json"])
-            if rec.human_decision is None:
+            if rec.requires_hitl and rec.human_decision is None:
                 results.append(rec)
         return results
