@@ -46,3 +46,7 @@ AUTHENTICITY_THRESHOLD: float = float(os.getenv("ID_DETECTOR_AUTH_THRESHOLD", "0
 
 # --- Logging ---
 LOG_LEVEL: str = os.getenv("ID_DETECTOR_LOG_LEVEL", "INFO")
+
+# --- Secure Storage (Encryption at Rest) ---
+ENCRYPTION_KEY: str | None = os.getenv("ENCRYPTION_KEY")
+STORAGE_DIR: str = os.getenv("ID_DETECTOR_STORAGE_DIR", "secure_storage")

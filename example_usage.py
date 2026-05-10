@@ -47,6 +47,34 @@ def main() -> None:
         try:
             result = agent.detect(file_paths[0])
             print(result.to_json())
+            
+            # If the ID is an authentic document, encrypt and save it
+            if result.is_id_document and result.is_authentic:
+                print("\n[Security] Authentic ID detected. Encrypting for secure storage...")
+                from id_detector import SecureStorage
+                try:
+                    storage = SecureStorage()
+                    with open(file_paths[0], "rb") as f:
+                        raw_bytes = f.read()
+                    
+                    encrypted_path = storage.encrypt_and_save(raw_bytes, metadata_prefix=result.document_type.value)
+                    print(f"[Security] Saved securely to: {encrypted_path}")
+                except Exception as e:
+                    print(f"[Security] Failed to encrypt: {e}")
+
+                # --- NEW: Run IP Intelligence Check ---
+                print("\n[KYC] Running IP Intelligence Check...")
+                from ip_intelligence import IPIntelligenceAgent, DeviceFingerprint
+                
+                ip_agent = IPIntelligenceAgent()
+                fingerprint = DeviceFingerprint(user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64)")
+                # Simulate an IP check (e.g. 8.8.8.8). 
+                # In a real app, this IP comes from the HTTP request headers.
+                ip_res = ip_agent.analyze("8.8.8.8", claimed_country_iso="US", fingerprint=fingerprint)
+                
+                print(f"Risk Score: {ip_res.risk_score}")
+                print(f"Reasoning: {ip_res.reasoning}")
+
         except IDDetectorError as exc:
             error_output = json.dumps(exc.to_dict(), indent=2)
             print(error_output, file=sys.stderr)

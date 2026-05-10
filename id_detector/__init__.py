@@ -23,6 +23,7 @@ from .exceptions import (
     UnsupportedFormatError,
 )
 from .schemas import DocumentType, IDDetectionResult
+from .storage import DecryptionError, EncryptionKeyMissingError, SecureStorage, StorageError
 
 __all__ = [
     "IDDetectorAgent",
@@ -33,6 +34,10 @@ __all__ = [
     "FileTooLargeError",
     "UnsupportedFormatError",
     "DetectionError",
+    "SecureStorage",
+    "StorageError",
+    "EncryptionKeyMissingError",
+    "DecryptionError",
 ]
 
-__version__ = "2.0.0"
+__version__ = "2.1.0"

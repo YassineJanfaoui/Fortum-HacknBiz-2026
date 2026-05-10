@@ -3,3 +3,4 @@ __pycache__
 *.jpg
 *.png
 Architecture of id detection agent.md
+*.mmdb
